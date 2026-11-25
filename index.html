@@ -4427,34 +4427,48 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 </style>
 <style id="nav-glass-plus">
 :is(.wide-tabs,.bottom-nav){
-  --nav-glass-tint:rgba(252,244,234,.40);
-  --nav-glass-rim:rgba(255,255,255,.94);
-  --nav-glass-sheen:rgba(255,255,255,.36);
-  --nav-glass-edge:rgba(107,68,42,.20);
-  --nav-glass-bounce:rgba(255,249,240,.52);
-  --nav-glass-drop:0 6px 20px rgba(59,36,24,.10),0 1px 3px rgba(59,36,24,.08);
+  background:transparent !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+  --nav-glass-tint:rgba(255,250,242,.20);
+  --nav-glass-rim:rgba(255,255,255,.96);
+  --nav-glass-sheen:rgba(255,255,255,.32);
+  --nav-glass-edge:rgba(115,74,46,.22);
+  --nav-glass-bounce:rgba(255,248,236,.56);
+  --nav-glass-drop:0 8px 24px rgba(59,36,24,.11),0 2px 6px rgba(59,36,24,.08);
   --nav-pill-glint:rgba(255,253,249,.62);
   --nav-pill-shadow:rgba(59,36,24,.16);
 }
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav){
-  --nav-glass-tint:rgba(40,43,50,.46);
-  --nav-glass-rim:rgba(238,242,250,.40);
-  --nav-glass-sheen:rgba(255,255,255,.11);
-  --nav-glass-edge:rgba(215,222,236,.22);
-  --nav-glass-bounce:rgba(202,210,226,.14);
-  --nav-glass-drop:0 8px 24px rgba(0,0,0,.32),0 1px 4px rgba(0,0,0,.22);
-  --nav-pill-glint:rgba(240,244,252,.16);
+  --nav-glass-tint:rgba(34,37,44,.28);
+  --nav-glass-rim:rgba(244,248,255,.46);
+  --nav-glass-sheen:rgba(255,255,255,.12);
+  --nav-glass-edge:rgba(218,226,240,.24);
+  --nav-glass-bounce:rgba(206,216,236,.18);
+  --nav-glass-drop:0 10px 28px rgba(0,0,0,.36),0 2px 8px rgba(0,0,0,.24);
+  --nav-pill-glint:rgba(240,244,252,.18);
   --nav-pill-shadow:rgba(6,8,12,.34);
 }
 @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
   @media(min-width:768px){
+    /* Keep .app-header off the backdrop-filter chain so .wide-tabs refracts scrolling content directly. */
     .app-header{
-      background:rgba(242,232,218,.62);
-      -webkit-backdrop-filter:blur(10px) saturate(115%);
-      backdrop-filter:blur(10px) saturate(115%);
+      background:transparent;
+      -webkit-backdrop-filter:none;
+      backdrop-filter:none;
     }
-    :root[data-theme=dark] .app-header{
-      background:rgba(38,40,44,.66);
+    .app-header::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background:linear-gradient(to bottom,rgba(242,232,218,.44) 0%,rgba(242,232,218,.22) 100%);
+      -webkit-backdrop-filter:blur(6px) saturate(125%);
+      backdrop-filter:blur(6px) saturate(125%);
+    }
+    :root[data-theme=dark] .app-header::before{
+      background:linear-gradient(to bottom,rgba(36,38,43,.50) 0%,rgba(36,38,43,.28) 100%);
     }
   }
   .bottom-nav{
@@ -4462,11 +4476,16 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
     box-shadow:var(--nav-glass-drop);
   }
   :is(.wide-tabs,.bottom-nav)::after{
-    -webkit-backdrop-filter:blur(13px) saturate(142%);
-    backdrop-filter:blur(13px) saturate(142%);
-    box-shadow:inset 0 1px 0 var(--nav-glass-rim),
+    background:linear-gradient(160deg,var(--nav-glass-sheen) 0%,transparent 24%,transparent 76%,var(--nav-glass-bounce) 100%),var(--nav-glass-tint);
+    -webkit-backdrop-filter:blur(16px) saturate(180%);
+    backdrop-filter:blur(16px) saturate(180%);
+    box-shadow:inset 0 1.25px 0 var(--nav-glass-rim),
       inset 0 -1px 0 var(--nav-glass-bounce),
       inset 0 0 0 1px var(--nav-glass-edge);
+  }
+  .bottom-nav::after{
+    -webkit-backdrop-filter:blur(18px) saturate(185%);
+    backdrop-filter:blur(18px) saturate(185%);
   }
   :is(.wide-tabs,.bottom-nav){
     --nav-pill-shadow-layer:inset 0 0 0 1px var(--segment-border),0 2px 5px var(--nav-pill-shadow);
@@ -4490,9 +4509,11 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   :is(.wide-tabs,.bottom-nav){--nav-pill-shadow-layer:initial;}
   @media(min-width:768px){
     .app-header{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none;}
+    .app-header::before{display:none;}
   }
   .bottom-nav{border-color:var(--border-lt);box-shadow:var(--shadow-md);}
   :is(.wide-tabs,.bottom-nav)::after{
+    background:var(--nav-glass-solid);
     -webkit-backdrop-filter:none;backdrop-filter:none;
     box-shadow:inset 0 0 0 1px var(--border-lt);
   }
@@ -4506,14 +4527,21 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   position:relative;
   z-index:1;
 }
-:is(.wide-tabs,.bottom-nav) > button:is(:hover,:active):not(:disabled),
+:is(.wide-tabs,.bottom-nav) > button,
+:is(.wide-tabs,.bottom-nav) > button:is(:hover,:active,:focus,.active,[aria-current=page]),
 :is(.wide-tabs,.bottom-nav):not([data-touch-nav-pill]) > button:is(:hover,:active):not(:disabled) {
-  background:transparent;
-  background-color:transparent;
-  box-shadow:none;
-  filter:none;
-  opacity:1 !important;
+  background:transparent !important;
+  background-color:transparent !important;
+  box-shadow:none !important;
+  filter:none !important;
   transform:none !important;
+  -webkit-tap-highlight-color:transparent;
+}
+:is(.wide-tabs,.bottom-nav) > button:active :is(.bn-icon,.bn-label) {
+  opacity:1 !important;
+}
+:is(.wide-tabs,.bottom-nav) > button[aria-current=page] {
+  color:var(--text);
 }
 @media (hover:hover) and (pointer:fine) {
   :is(.wide-tabs,.bottom-nav) > button:not([aria-current=page]):hover {
@@ -4536,106 +4564,132 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   transform:translate3d(var(--nav-drag-x,var(--pill-x)),var(--nav-drag-y,var(--pill-y)),0);
   will-change:transform,width,height;
 }
+/* Beat ID-weighted base rules (#panel-cal .view-toggle) so .wide-tabs & .bottom-nav stay transparent and driven 100% by spring JS. */
+:is(#touch-nav-spec,.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-pill-ready]::before,
+:is(#touch-nav-spec,.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-pill-ready][data-pill-moving]::before {
+  background-color:transparent !important;
+  transition-property:box-shadow,filter !important;
+  transition-duration:150ms !important;
+  transition-timing-function:var(--ease-ios) !important;
+}
 :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill] {
   --nav-drag-transition:none;
-  --nav-drag-top:rgba(255,253,249,.76);
-  --nav-drag-mid:rgba(244,225,202,.56);
-  --nav-drag-bot:rgba(234,207,175,.64);
-  --nav-drag-glint:rgba(255,254,251,.62);
-  --nav-drag-reflection:rgba(196,144,92,.20);
-  --nav-drag-specular:rgba(255,255,255,.78);
-  --nav-drag-caustic:rgba(218,176,132,.34);
-  --nav-drag-rim:rgba(255,254,250,.96);
-  --nav-drag-edge:rgba(138,86,52,.36);
-  --nav-drag-bottom-glint:rgba(214,174,134,.36);
-  --nav-drag-inner-glow:rgba(255,250,242,.38);
-  --nav-drag-shadow:0 2px 6px rgba(59,36,24,.14),0 0 0 .5px rgba(138,86,52,.10);
+  --nav-drag-top:rgba(255,253,249,.34);
+  --nav-drag-mid:rgba(246,230,210,.15);
+  --nav-drag-bot:rgba(235,212,184,.24);
+  --nav-drag-specular:rgba(255,255,255,.94);
+  --nav-drag-caustic:rgba(214,166,118,.42);
+  --nav-drag-rim-tint:rgba(255,250,242,.34);
+  --nav-drag-rim:rgba(255,255,255,1);
+  --nav-drag-edge:rgba(138,86,52,.42);
+  --nav-drag-bottom-glint:rgba(188,134,88,.42);
+  --nav-drag-inner-glow:rgba(255,251,244,.44);
+  --nav-drag-edge-caustic:rgba(255,248,236,.52);
+  --nav-drag-shadow:0 3px 10px rgba(59,36,24,.14),0 0 0 .5px rgba(138,86,52,.12);
   --nav-pill-shadow-layer:inset 0 0 0 1px var(--nav-drag-edge),
     inset 0 1.25px 0 var(--nav-drag-rim),
     inset 0 -1px 0 var(--nav-drag-bottom-glint),
-    inset 0 0 6px var(--nav-drag-inner-glow),
+    inset var(--nav-edge-shift,0px) 0 6px var(--nav-drag-edge-caustic),
+    inset 0 0 7px var(--nav-drag-inner-glow),
     var(--nav-drag-shadow);
 }
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill] {
-  --nav-drag-top:rgba(98,104,118,.52);
-  --nav-drag-mid:rgba(66,70,80,.44);
-  --nav-drag-bot:rgba(50,54,62,.52);
-  --nav-drag-glint:rgba(242,246,255,.16);
-  --nav-drag-reflection:rgba(198,208,224,.09);
-  --nav-drag-specular:rgba(244,248,255,.32);
-  --nav-drag-caustic:rgba(202,212,232,.18);
-  --nav-drag-rim:rgba(244,248,255,.46);
-  --nav-drag-edge:rgba(210,218,232,.34);
-  --nav-drag-bottom-glint:rgba(196,206,224,.18);
-  --nav-drag-inner-glow:rgba(220,228,242,.12);
-  --nav-drag-shadow:0 2px 7px rgba(0,0,0,.30);
+  --nav-drag-top:rgba(124,132,148,.24);
+  --nav-drag-mid:rgba(74,79,90,.14);
+  --nav-drag-bot:rgba(58,63,74,.22);
+  --nav-drag-specular:rgba(255,255,255,.54);
+  --nav-drag-caustic:rgba(212,222,242,.26);
+  --nav-drag-rim-tint:rgba(226,234,248,.16);
+  --nav-drag-rim:rgba(246,249,255,.68);
+  --nav-drag-edge:rgba(218,226,242,.44);
+  --nav-drag-bottom-glint:rgba(204,214,234,.28);
+  --nav-drag-inner-glow:rgba(232,238,250,.18);
+  --nav-drag-edge-caustic:rgba(236,242,255,.28);
+  --nav-drag-shadow:0 3px 10px rgba(0,0,0,.36);
 }
 :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
-  background-color:transparent;
+  background-color:transparent !important;
   background-image:
-    radial-gradient(64% 92% at var(--nav-glint-x,50%) 0%,var(--nav-drag-specular) 0%,transparent 65%),
-    radial-gradient(54% 72% at calc(100% - var(--nav-glint-x,50%)) 100%,var(--nav-drag-caustic) 0%,transparent 62%),
-    linear-gradient(var(--nav-glint-angle,168deg),var(--nav-drag-top) 0%,var(--nav-drag-mid) 52%,var(--nav-drag-bot) 100%);
-  transition:box-shadow 150ms var(--ease-ios),filter 150ms var(--ease-ios);
+    radial-gradient(62% 88% at var(--nav-glint-x,50%) 0%,var(--nav-drag-specular) 0%,transparent 62%),
+    radial-gradient(56% 74% at calc(100% - var(--nav-glint-x,50%)) 100%,var(--nav-drag-caustic) 0%,transparent 60%),
+    radial-gradient(115% 135% at 50% 50%,transparent 56%,var(--nav-drag-rim-tint) 94%,var(--nav-drag-specular) 100%),
+    linear-gradient(var(--nav-glint-angle,168deg),var(--nav-drag-top) 0%,var(--nav-drag-mid) 50%,var(--nav-drag-bot) 100%);
 }
 :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
-  --nav-drag-top:rgba(255,252,246,.34);
-  --nav-drag-mid:rgba(245,228,206,.22);
-  --nav-drag-bot:rgba(232,202,168,.30);
-  --nav-drag-glint:rgba(255,255,255,.88);
-  --nav-drag-reflection:rgba(196,144,92,.28);
-  --nav-drag-specular:rgba(255,255,255,.96);
-  --nav-drag-caustic:rgba(212,164,116,.52);
-  --nav-drag-rim:rgba(255,255,255,.99);
-  --nav-drag-edge:rgba(138,86,52,.48);
-  --nav-drag-bottom-glint:rgba(168,114,72,.44);
-  --nav-drag-inner-glow:rgba(255,248,238,.54);
-  --nav-drag-shadow:0 8px 20px rgba(59,36,24,.18),0 2px 6px rgba(59,36,24,.11);
+  --nav-drag-top:rgba(255,253,248,.22);
+  --nav-drag-mid:rgba(245,228,206,.09);
+  --nav-drag-bot:rgba(232,202,168,.18);
+  --nav-drag-specular:rgba(255,255,255,.99);
+  --nav-drag-caustic:rgba(214,164,114,.58);
+  --nav-drag-rim-tint:rgba(255,252,246,.46);
+  --nav-drag-rim:rgba(255,255,255,1);
+  --nav-drag-edge:rgba(138,86,52,.52);
+  --nav-drag-bottom-glint:rgba(176,120,76,.50);
+  --nav-drag-inner-glow:rgba(255,250,242,.62);
+  --nav-drag-edge-caustic:rgba(255,252,244,.76);
+  --nav-drag-shadow:0 10px 26px rgba(59,36,24,.20),0 3px 8px rgba(59,36,24,.12);
+  --nav-pill-shadow-layer:inset 0 0 0 1.25px var(--nav-drag-edge),
+    inset 0 1.5px 0 var(--nav-drag-rim),
+    inset 0 -1.5px 0 var(--nav-drag-bottom-glint),
+    inset var(--nav-edge-shift,0px) 0 8px var(--nav-drag-edge-caustic),
+    inset 0 0 11px var(--nav-drag-inner-glow),
+    var(--nav-drag-shadow);
 }
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
-  --nav-drag-top:rgba(128,136,154,.30);
-  --nav-drag-mid:rgba(86,92,106,.20);
-  --nav-drag-bot:rgba(66,72,84,.28);
-  --nav-drag-glint:rgba(248,250,255,.32);
-  --nav-drag-reflection:rgba(208,218,236,.18);
-  --nav-drag-specular:rgba(255,255,255,.78);
-  --nav-drag-caustic:rgba(214,224,242,.34);
-  --nav-drag-rim:rgba(248,250,255,.92);
-  --nav-drag-edge:rgba(224,230,242,.68);
-  --nav-drag-bottom-glint:rgba(214,222,238,.42);
-  --nav-drag-inner-glow:rgba(232,238,248,.24);
-  --nav-drag-shadow:0 8px 22px rgba(0,0,0,.46),0 2px 6px rgba(0,0,0,.28);
+  --nav-drag-top:rgba(146,154,172,.20);
+  --nav-drag-mid:rgba(86,92,106,.10);
+  --nav-drag-bot:rgba(68,74,88,.18);
+  --nav-drag-specular:rgba(255,255,255,.90);
+  --nav-drag-caustic:rgba(220,230,248,.44);
+  --nav-drag-rim-tint:rgba(234,240,252,.26);
+  --nav-drag-rim:rgba(250,252,255,.96);
+  --nav-drag-edge:rgba(232,238,250,.78);
+  --nav-drag-bottom-glint:rgba(218,226,242,.50);
+  --nav-drag-inner-glow:rgba(236,242,252,.30);
+  --nav-drag-edge-caustic:rgba(244,248,255,.52);
+  --nav-drag-shadow:0 10px 26px rgba(0,0,0,.52),0 3px 8px rgba(0,0,0,.30);
 }
 @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
-    -webkit-backdrop-filter:blur(10px) saturate(150%);
-    backdrop-filter:blur(10px) saturate(150%);
+    -webkit-backdrop-filter:blur(8px) saturate(195%) brightness(1.04) contrast(1.03);
+    backdrop-filter:blur(8px) saturate(195%) brightness(1.04) contrast(1.03);
+  }
+  :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
+    -webkit-backdrop-filter:blur(8px) saturate(185%) brightness(1.14) contrast(1.04);
+    backdrop-filter:blur(8px) saturate(185%) brightness(1.14) contrast(1.04);
   }
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
-    -webkit-backdrop-filter:blur(8px) saturate(185%) brightness(1.06);
-    backdrop-filter:blur(8px) saturate(185%) brightness(1.06);
+    -webkit-backdrop-filter:blur(7px) saturate(215%) brightness(1.08) contrast(1.05);
+    backdrop-filter:blur(7px) saturate(215%) brightness(1.08) contrast(1.05);
   }
   :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
-    -webkit-backdrop-filter:blur(8px) saturate(175%) brightness(1.18);
-    backdrop-filter:blur(8px) saturate(175%) brightness(1.18);
+    -webkit-backdrop-filter:blur(7px) saturate(200%) brightness(1.22) contrast(1.06);
+    backdrop-filter:blur(7px) saturate(200%) brightness(1.22) contrast(1.06);
   }
 }
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more), (forced-colors:active) {
+  :is(.wide-tabs,.bottom-nav) {
+    background:var(--nav-bg) !important;
+  }
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill],
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
     --segment-fill:var(--nav-sel);
     --nav-pill-shadow-layer:inset 0 0 0 1px var(--segment-border);
   }
-  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
-    background-color:var(--nav-sel);
+  :is(#touch-nav-spec,.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-pill-ready]::before,
+  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before,
+  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
+    background-color:var(--nav-sel) !important;
     background-image:none;
     -webkit-backdrop-filter:none;
     backdrop-filter:none;
   }
 }
 @media (prefers-reduced-motion:reduce) {
+  :is(#touch-nav-spec,.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-pill-ready]::before,
+  :is(#touch-nav-spec,.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-pill-ready][data-pill-moving]::before,
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
-    transition:none;
+    transition:none !important;
   }
 }
 </style>
@@ -10408,12 +10462,14 @@ function mountTouchNavPills() {
 }
 
 function mountTouchNavPill(group) {
+  const isBottomNav=group.classList.contains('bottom-nav');
   const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)');
   const tabs=[...group.querySelectorAll(':scope > button')];
   const active=()=>tabs.find(tab=>tab.getAttribute('aria-current')==='page');
-  const properties=['--nav-drag-x','--nav-drag-y','--nav-drag-width','--nav-drag-height','--nav-glint-x','--nav-glint-angle'];
+  const properties=['--nav-drag-x','--nav-drag-y','--nav-drag-width','--nav-drag-height','--nav-glint-x','--nav-glint-angle','--nav-edge-shift'];
   const threshold=6;
   const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+  const rubber=(over,dim)=>over===0?0:(Math.sign(over)*(Math.abs(over)*dim*0.35)/(dim+0.35*Math.abs(over)));
   let target,position,velocity=[0,0,0,0,0,0],frame=0,dragFrame=0,lastFrame=0;
   let gesture,blockClick=false,blockClickTimer=0;
 
@@ -10428,9 +10484,9 @@ function mountTouchNavPill(group) {
     const [left,top,width,height,stretch,lift]=position;
     const extension=Math.max(0,stretch);
     const l=Math.max(0,lift);
-    const cushionX=l*3;
-    const cushionY=l*2.6;
-    const liftOffset=l*1.8;
+    const cushionX=l*(isBottomNav?4:3.5);
+    const cushionY=l*(isBottomNav?3.6:2.8);
+    const liftOffset=l*(isBottomNav?2.5:1.9);
     return [left-(extension+cushionX)/2,top-liftOffset,width+extension+cushionX,height+cushionY,l];
   }
 
@@ -10443,12 +10499,14 @@ function mountTouchNavPill(group) {
     const tilt=reducedMotion.matches?0:clamp(vx/900,-1,1);
     const glintX=clamp(50+(ratio-0.5)*56+tilt*18,12,88).toFixed(1)+'%';
     const glintAngle=(168-tilt*14).toFixed(1)+'deg';
+    const edgeShift=reducedMotion.matches?'0px':clamp(vx/140,-3.5,3.5).toFixed(2)+'px';
     group.style.setProperty(properties[0],left+'px');
     group.style.setProperty(properties[1],top+'px');
     group.style.setProperty(properties[2],width+'px');
     group.style.setProperty(properties[3],height+'px');
     group.style.setProperty(properties[4],glintX);
     group.style.setProperty(properties[5],glintAngle);
+    group.style.setProperty(properties[6],edgeShift);
     group.toggleAttribute('data-touch-nav-pill-raised',lift>0.08||Boolean(gesture));
   }
 
@@ -10580,19 +10638,56 @@ function mountTouchNavPill(group) {
     return Array.from(event.changedTouches).find(touch=>touch.identifier===gesture?.id);
   }
 
-  function follow(touch) {
+  function followClientX(clientX) {
     const now=performance.now();
     const dt=Math.max(0.004,(now-gesture.lastTime)/1000);
-    const instantVx=(touch.clientX-gesture.lastX)/dt;
+    const instantVx=(clientX-gesture.lastX)/dt;
     gesture.vx=gesture.vx*0.45+instantVx*0.55;
-    gesture.lastX=touch.clientX;
+    gesture.lastX=clientX;
     gesture.lastTime=now;
-    const dx=touch.clientX-gesture.x;
+    const dx=clientX-gesture.x;
     const first=tabs[0],last=tabs[tabs.length-1];
-    const left=clamp(gesture.start+dx,first.offsetLeft,last.offsetLeft+last.offsetWidth-position[2]);
+    const minLeft=first.offsetLeft;
+    const maxLeft=last.offsetLeft+last.offsetWidth-position[2];
+    const raw=gesture.start+dx;
+    let left=clamp(raw,minLeft,maxLeft);
+    if(!reducedMotion.matches){
+      if(raw<minLeft)left=minLeft+clamp(rubber(raw-minLeft,24),-2.5,0);
+      else if(raw>maxLeft)left=maxLeft+clamp(rubber(raw-maxLeft,24),0,2.5);
+    }
     position[0]=left;
     if(reducedMotion.matches){position[4]=0;position[5]=0;}
     paint();
+  }
+
+  function follow(touch) {
+    followClientX(touch.clientX);
+  }
+
+  function commitDragRelease(clientX,clientY,wasDragging,releaseVx) {
+    if(wasDragging) {
+      const bounds=group.getBoundingClientRect();
+      const slop=44;
+      if(clientX>=bounds.left-slop&&clientX<=bounds.right+slop&&clientY>=bounds.top-slop&&clientY<=bounds.bottom+slop) {
+        const [left,,width]=paintedBounds();
+        const center=left+width/2;
+        const distance=tab=>Math.abs(tab.offsetLeft+tab.offsetWidth/2-center);
+        const selected=active();
+        const nearest=tabs.reduce((closest,tab)=>distance(tab)<distance(closest)?tab:closest,selected);
+        if(nearest!==selected){
+          target=[nearest.offsetLeft,nearest.offsetTop,nearest.offsetWidth,nearest.offsetHeight,0,0];
+          gesture=null;
+          nearest.click();
+        }
+      }
+    }
+    gesture=null;
+    if(wasDragging){
+      if(!reducedMotion.matches)velocity[0]=clamp(releaseVx,-1600,1600);
+      clearTimeout(blockClickTimer);
+      blockClickTimer=setTimeout(()=>{blockClick=false;},350);
+    }
+    settle();
   }
 
   group.addEventListener('touchmove',event=>{
@@ -10624,28 +10719,8 @@ function mountTouchNavPill(group) {
     if(wasDragging) {
       if(event.cancelable)event.preventDefault();
       follow(touch);
-      const bounds=group.getBoundingClientRect();
-      const slop=44;
-      if(touch.clientX>=bounds.left-slop&&touch.clientX<=bounds.right+slop&&touch.clientY>=bounds.top-slop&&touch.clientY<=bounds.bottom+slop) {
-        const [left,,width]=paintedBounds();
-        const center=left+width/2;
-        const distance=tab=>Math.abs(tab.offsetLeft+tab.offsetWidth/2-center);
-        const selected=active();
-        const nearest=tabs.reduce((closest,tab)=>distance(tab)<distance(closest)?tab:closest,selected);
-        if(nearest!==selected){
-          target=[nearest.offsetLeft,nearest.offsetTop,nearest.offsetWidth,nearest.offsetHeight,0,0];
-          gesture=null;
-          nearest.click();
-        }
-      }
     }
-    gesture=null;
-    if(wasDragging){
-      if(!reducedMotion.matches)velocity[0]=clamp(releaseVx,-1600,1600);
-      clearTimeout(blockClickTimer);
-      blockClickTimer=setTimeout(()=>{blockClick=false;},350);
-    }
-    settle();
+    commitDragRelease(touch.clientX,touch.clientY,wasDragging,releaseVx);
   },{passive:false});
 
   function cancelTouch() {
@@ -10658,7 +10733,56 @@ function mountTouchNavPill(group) {
   }
   group.addEventListener('touchcancel',cancelTouch);
   group.addEventListener('contextmenu',event=>{if(gesture)event.preventDefault();});
-  group.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse')blockClick=false;});
+  group.addEventListener('pointerdown',event=>{
+    if(event.pointerType==='mouse')blockClick=false;
+    if(event.pointerType==='touch'||event.button!==0)return;
+    if(!touchesPill(event,event.target))return;
+    clearTimeout(blockClickTimer);
+    freeze();
+    velocity=[0,0,0,0,velocity[4],velocity[5]];
+    gesture={
+      id:'pointer:'+event.pointerId,
+      pointerId:event.pointerId,
+      x:event.clientX,
+      y:event.clientY,
+      start:position[0],
+      lastX:event.clientX,
+      lastTime:performance.now(),
+      vx:0,
+      dragging:false
+    };
+    if(!reducedMotion.matches)position[5]=Math.max(position[5],0.45);
+    paint();
+    if(!reducedMotion.matches)startDragLoop();
+  });
+  group.addEventListener('pointermove',event=>{
+    if(gesture?.id!=='pointer:'+event.pointerId)return;
+    if(!gesture.dragging){
+      const dx=Math.abs(event.clientX-gesture.x),dy=Math.abs(event.clientY-gesture.y);
+      if(Math.max(dx,dy)<threshold)return;
+      blockClick=true;
+      if(dy>=dx){cancelTouch();return;}
+      gesture.dragging=true;
+      try{group.setPointerCapture(event.pointerId);}catch{}
+    }
+    followClientX(event.clientX);
+  });
+  const endPointer=event=>{
+    if(gesture?.id!=='pointer:'+event.pointerId)return;
+    const wasDragging=gesture.dragging;
+    const releaseVx=gesture.vx;
+    if(wasDragging)followClientX(event.clientX);
+    try{if(group.hasPointerCapture(event.pointerId))group.releasePointerCapture(event.pointerId);}catch{}
+    commitDragRelease(event.clientX,event.clientY,wasDragging,releaseVx);
+  };
+  group.addEventListener('pointerup',endPointer);
+  window.addEventListener('pointerup',endPointer);
+  group.addEventListener('pointercancel',event=>{
+    if(gesture?.id==='pointer:'+event.pointerId)cancelTouch();
+  });
+  window.addEventListener('pointercancel',event=>{
+    if(gesture?.id==='pointer:'+event.pointerId)cancelTouch();
+  });
   group.addEventListener('click',event=>{
     if(!blockClick||!event.isTrusted||!event.detail)return;
     event.preventDefault();

@@ -563,3 +563,19 @@
 - 已驗證：`compile_applet`、`lint_applet`、Inline JS 語法檢查、本機 `http://127.0.0.1:3000/` HTTP 200 及 Node 彈簧物理模擬通過（483ms 收斂、約 1px 回彈）。
 - 待驗證：目前環境無 Chrome／Safari 實機或瀏覽器視覺執行工具，iPhone／iPad 深淺色「慢拖跨兩格 → 中途停住 → 放手 → 快速點回」、有色背景捲動透光對比、iPhone／iPad Safari 實際玻璃合成（預期走半透明填色＋`backdrop-filter` 柔化＋局部邊緣高光近似效果，非 SVG 位移折射）及主畫面版 PWA 均列為待驗證；改動留於 AI Studio 預覽，未推送至 StudyOS-test。
 
+## 2026-11-25 `.bottom-nav` Liquid Glass 模糊與拖曳微調（Focus Mode）
+
+- 提高 `.bottom-nav::after` 模糊與飽和度至 `blur(24px) saturate(185%)`，並調輕深淺色玻璃底色及強化頂底邊緣亮邊。
+- 強制清除 `.bottom-nav` 本身與所有狀態下 `.bn-btn` 的殘留底色、tap highlight 與按壓縮放，確保只留單一選取膠囊（`::before`）。
+- 增強 `.bottom-nav` 選取膠囊按住時的微升浮起尺寸與邊緣高光反光，並補上非觸控指標拖曳支援與邊緣微幅彈性阻尼，讓兩格間滑動與收斂更跟手。
+- 已驗證：`compile_applet`、`lint_applet`、Inline JS 語法檢查通過；Chrome／Safari 實機與模擬器觸控手勢及實際玻璃模糊待驗。
+
+## 2026-11-25 iPad 頂部（`.wide-tabs`）與 iPhone 底部（`.bottom-nav`）雙層 Liquid Glass 與透鏡折射微調（AI Studio 預覽）
+
+- **解除 iPad 頂部遮蔽與衝突**：將 `@media (min-width:768px) .app-header` 的模糊改置於 `.app-header::before`（`blur(6px)`、低不透明度漸層），避免 `.app-header` 建立 Backdrop Root 擋住 `.wide-tabs` 折射捲動內容；並以高權重規則覆蓋 `#panel-cal .view-toggle` 帶出的 `background-color: var(--segment-fill)` 實色殘留與 `250ms` CSS `transition` 對 `requestAnimationFrame` 彈簧的干擾。
+- **底座（薄玻璃）與選取膠囊（較厚透明透鏡）**：統一 `.wide-tabs` 與 `.bottom-nav` 的雙層玻璃參數——底座（`::after`）維持中央高透光（淺 `0.20`／深 `0.28`、`blur(16px–18px) saturate(180%–185%)`）與邊緣高光；膠囊（`::before`）於靜止與按住態皆保持中央通透、加上周緣透鏡厚度環與動態 `--nav-glint-x`／`--nav-glint-angle`／`--nav-edge-shift` 亮邊反光（深色灰銀、淺色暖白＋棕色輪廓），並強制清除兩組導覽所有按鈕狀態的殘留底色。
+- **拖曳與指標相容性**：將非觸控指標拖曳與邊界微幅彈性阻尼（`±2.5px`）同時套用於 `.wide-tabs` 與 `.bottom-nav`，且延後至超過 `6px` 水平閾值才啟用 `setPointerCapture`，避免干擾一般點擊；「減少動態效果」維持跟手拖曳與單次切頁、略過伸展與回彈。
+- **技術限制註記**：iPhone／iPad Safari 不支援 `backdrop-filter: url(#svg-filter)` 位移折射，本實作採用透明填色、雙層背景柔化與動態邊緣高光／折射光暈呈現近似 Liquid Glass 效果。
+- **待驗證**：本機環境無 Chrome／Safari／Playwright 瀏覽器執行工具，iPhone（`393×852`）與 iPad（`820×1180`）深淺色可操作視覺檢視、有色背景捲動透光、「按住 → 慢拖跨兩格 → 中途停住 → 放手」手勢及 Safari／PWA 實機合成均列為待驗證（可由開發預覽網址實機操作驗收）。改動保留於 AI Studio 預覽，未推送至 `StudyOS-test`。
+
+
