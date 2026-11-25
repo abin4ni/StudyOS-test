@@ -4385,19 +4385,19 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 /* Keep the material behind the original selection, controls and focus rings. */
 :is(.wide-tabs,.bottom-nav){
   --nav-glass-solid:var(--sunken);
-  --nav-glass-tint:rgba(247,238,226,.84);
-  --nav-glass-rim:rgba(255,255,255,.72);
-  --nav-glass-sheen:rgba(255,255,255,.18);
+  --nav-glass-tint:rgba(250,242,231,.42);
+  --nav-glass-rim:rgba(255,255,255,.88);
+  --nav-glass-sheen:rgba(255,255,255,.32);
   background:transparent;
 }
 .bottom-nav{
   --nav-glass-solid:var(--nav-bg);
-  --nav-glass-tint:rgba(255,250,242,.85);
+  --nav-glass-tint:rgba(255,250,242,.44);
 }
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav){
-  --nav-glass-tint:rgba(51,54,59,.93);
-  --nav-glass-rim:rgba(255,255,255,.25);
-  --nav-glass-sheen:rgba(255,255,255,.05);
+  --nav-glass-tint:rgba(42,45,52,.48);
+  --nav-glass-rim:rgba(236,241,250,.38);
+  --nav-glass-sheen:rgba(255,255,255,.11);
 }
 :is(.wide-tabs,.bottom-nav)::after{
   content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
@@ -4406,9 +4406,12 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 }
 @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
   :is(.wide-tabs,.bottom-nav)::after{
-    background:linear-gradient(145deg,var(--nav-glass-sheen),transparent 62%),var(--nav-glass-tint);
-    -webkit-backdrop-filter:blur(10px) saturate(105%);
-    backdrop-filter:blur(10px) saturate(105%);
+    background:linear-gradient(155deg,var(--nav-glass-sheen) 0%,rgba(255,255,255,.04) 40%,transparent 68%,rgba(255,248,238,.16) 100%),var(--nav-glass-tint);
+    -webkit-backdrop-filter:blur(12px) saturate(140%);
+    backdrop-filter:blur(12px) saturate(140%);
+  }
+  :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)::after{
+    background:linear-gradient(155deg,var(--nav-glass-sheen) 0%,rgba(255,255,255,.02) 42%,transparent 70%,rgba(215,222,236,.07) 100%),var(--nav-glass-tint);
   }
 }
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more), (forced-colors:active){
@@ -4424,27 +4427,46 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 </style>
 <style id="nav-glass-plus">
 :is(.wide-tabs,.bottom-nav){
-  --nav-glass-tint:rgba(255,250,242,.72);
+  --nav-glass-tint:rgba(252,244,234,.40);
   --nav-glass-rim:rgba(255,255,255,.94);
-  --nav-glass-sheen:rgba(255,255,255,.34);
-  --nav-glass-edge:rgba(89,57,35,.23);
-  --nav-pill-glint:rgba(255,250,242,.46);
-  --nav-pill-shadow:rgba(59,36,24,.20);
+  --nav-glass-sheen:rgba(255,255,255,.36);
+  --nav-glass-edge:rgba(107,68,42,.20);
+  --nav-glass-bounce:rgba(255,249,240,.52);
+  --nav-glass-drop:0 6px 20px rgba(59,36,24,.10),0 1px 3px rgba(59,36,24,.08);
+  --nav-pill-glint:rgba(255,253,249,.62);
+  --nav-pill-shadow:rgba(59,36,24,.16);
 }
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav){
-  --nav-glass-tint:rgba(32,34,38,.83);
-  --nav-glass-rim:rgba(255,255,255,.52);
-  --nav-glass-sheen:rgba(255,255,255,.04);
-  --nav-glass-edge:rgba(217,218,220,.28);
-  --nav-pill-glint:rgba(255,255,255,.12);
-  --nav-pill-shadow:rgba(8,9,11,.36);
+  --nav-glass-tint:rgba(40,43,50,.46);
+  --nav-glass-rim:rgba(238,242,250,.40);
+  --nav-glass-sheen:rgba(255,255,255,.11);
+  --nav-glass-edge:rgba(215,222,236,.22);
+  --nav-glass-bounce:rgba(202,210,226,.14);
+  --nav-glass-drop:0 8px 24px rgba(0,0,0,.32),0 1px 4px rgba(0,0,0,.22);
+  --nav-pill-glint:rgba(240,244,252,.16);
+  --nav-pill-shadow:rgba(6,8,12,.34);
 }
 @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+  @media(min-width:768px){
+    .app-header{
+      background:rgba(242,232,218,.62);
+      -webkit-backdrop-filter:blur(10px) saturate(115%);
+      backdrop-filter:blur(10px) saturate(115%);
+    }
+    :root[data-theme=dark] .app-header{
+      background:rgba(38,40,44,.66);
+    }
+  }
+  .bottom-nav{
+    border-color:transparent;
+    box-shadow:var(--nav-glass-drop);
+  }
   :is(.wide-tabs,.bottom-nav)::after{
-    -webkit-backdrop-filter:blur(15px) saturate(112%);
-    backdrop-filter:blur(15px) saturate(112%);
-    box-shadow:inset 0 1px 0 var(--nav-glass-rim),inset 0 0 0 1px var(--nav-glass-edge),
-      inset 0 -2px 3px var(--nav-pill-shadow);
+    -webkit-backdrop-filter:blur(13px) saturate(142%);
+    backdrop-filter:blur(13px) saturate(142%);
+    box-shadow:inset 0 1px 0 var(--nav-glass-rim),
+      inset 0 -1px 0 var(--nav-glass-bounce),
+      inset 0 0 0 1px var(--nav-glass-edge);
   }
   :is(.wide-tabs,.bottom-nav){
     --nav-pill-shadow-layer:inset 0 0 0 1px var(--segment-border),0 2px 5px var(--nav-pill-shadow);
@@ -4453,11 +4475,12 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
     background-image:linear-gradient(var(--nav-pill-glint),transparent 68%);
   }
   @media(max-width:767px){
-    /* Keep the existing end-of-scroll clearance inside the Today scroller. */
-    html:not([data-keyboard-viewport]) .app-shell:has(#panel-r.mob-active[data-mobile-day=today]):not(:has(#today-task-lists input:focus)){
+    /* Keep end-of-scroll clearance inside scrollable tabs so content passes behind the glass dock. */
+    html:not([data-keyboard-viewport]) .app-shell:has(:is(#panel-r,#panel-l).mob-active,#study-room:not([hidden])):not(:has(#today-task-lists input:focus)){
       padding-block-end:0;
     }
-    html:not([data-keyboard-viewport]) #panel-r.mob-active[data-mobile-day=today]:not(:has(#today-task-lists input:focus)){
+    html:not([data-keyboard-viewport]) :is(#panel-r,#panel-l).mob-active:not(:has(#today-task-lists input:focus)),
+    html:not([data-keyboard-viewport]) #study-room:not([hidden]){
       padding-block-end:calc(var(--sp-6) + var(--bot-h));
       scroll-padding-block-end:var(--bot-h);
     }
@@ -4465,6 +4488,10 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 }
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more), (forced-colors:active){
   :is(.wide-tabs,.bottom-nav){--nav-pill-shadow-layer:initial;}
+  @media(min-width:768px){
+    .app-header{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none;}
+  }
+  .bottom-nav{border-color:var(--border-lt);box-shadow:var(--shadow-md);}
   :is(.wide-tabs,.bottom-nav)::after{
     -webkit-backdrop-filter:none;backdrop-filter:none;
     box-shadow:inset 0 0 0 1px var(--border-lt);
@@ -4485,6 +4512,8 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   background-color:transparent;
   box-shadow:none;
   filter:none;
+  opacity:1 !important;
+  transform:none !important;
 }
 @media (hover:hover) and (pointer:fine) {
   :is(.wide-tabs,.bottom-nav) > button:not([aria-current=page]):hover {
@@ -4500,7 +4529,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   -webkit-touch-callout:none;
   -webkit-user-select:none;
   user-select:none;
-  transform:none;
+  transform:none !important;
 }
 :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-pill-ready]::before {
   height:var(--nav-drag-height,var(--pill-height));
@@ -4509,77 +4538,104 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 }
 :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill] {
   --nav-drag-transition:none;
-  --nav-drag-glint:rgba(255,253,249,.72);
-  --nav-drag-reflection:rgba(205,159,112,.14);
-  --nav-drag-rim:rgba(255,252,247,.92);
-  --nav-drag-edge:rgba(138,86,52,.25);
-  --nav-drag-bottom-glint:rgba(255,248,238,.28);
-  --nav-drag-shadow:0 1px 3px rgba(59,36,24,.14);
+  --nav-drag-top:rgba(255,253,249,.76);
+  --nav-drag-mid:rgba(244,225,202,.56);
+  --nav-drag-bot:rgba(234,207,175,.64);
+  --nav-drag-glint:rgba(255,254,251,.62);
+  --nav-drag-reflection:rgba(196,144,92,.20);
+  --nav-drag-specular:rgba(255,255,255,.78);
+  --nav-drag-caustic:rgba(218,176,132,.34);
+  --nav-drag-rim:rgba(255,254,250,.96);
+  --nav-drag-edge:rgba(138,86,52,.36);
+  --nav-drag-bottom-glint:rgba(214,174,134,.36);
+  --nav-drag-inner-glow:rgba(255,250,242,.38);
+  --nav-drag-shadow:0 2px 6px rgba(59,36,24,.14),0 0 0 .5px rgba(138,86,52,.10);
   --nav-pill-shadow-layer:inset 0 0 0 1px var(--nav-drag-edge),
-    inset 0 1px 0 var(--nav-drag-rim),inset 0 -1px 0 var(--nav-drag-bottom-glint),var(--nav-drag-shadow);
+    inset 0 1.25px 0 var(--nav-drag-rim),
+    inset 0 -1px 0 var(--nav-drag-bottom-glint),
+    inset 0 0 6px var(--nav-drag-inner-glow),
+    var(--nav-drag-shadow);
 }
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill] {
-  --nav-drag-color:#3e424a;
-  --nav-drag-alpha:80%;
-  --nav-drag-glint:rgba(235,240,250,.14);
-  --nav-drag-reflection:rgba(196,204,218,.06);
-  --nav-drag-rim:rgba(232,237,246,.30);
-  --nav-drag-edge:rgba(205,213,226,.28);
-  --nav-drag-bottom-glint:rgba(210,218,234,.12);
-  --nav-drag-shadow:0 1px 4px rgba(0,0,0,.30);
+  --nav-drag-top:rgba(98,104,118,.52);
+  --nav-drag-mid:rgba(66,70,80,.44);
+  --nav-drag-bot:rgba(50,54,62,.52);
+  --nav-drag-glint:rgba(242,246,255,.16);
+  --nav-drag-reflection:rgba(198,208,224,.09);
+  --nav-drag-specular:rgba(244,248,255,.32);
+  --nav-drag-caustic:rgba(202,212,232,.18);
+  --nav-drag-rim:rgba(244,248,255,.46);
+  --nav-drag-edge:rgba(210,218,232,.34);
+  --nav-drag-bottom-glint:rgba(196,206,224,.18);
+  --nav-drag-inner-glow:rgba(220,228,242,.12);
+  --nav-drag-shadow:0 2px 7px rgba(0,0,0,.30);
 }
 :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
-  background-color:var(--segment-fill);
-  background-image:linear-gradient(180deg,var(--nav-drag-glint),transparent 52%,var(--nav-drag-reflection));
+  background-color:transparent;
+  background-image:
+    radial-gradient(64% 92% at var(--nav-glint-x,50%) 0%,var(--nav-drag-specular) 0%,transparent 65%),
+    radial-gradient(54% 72% at calc(100% - var(--nav-glint-x,50%)) 100%,var(--nav-drag-caustic) 0%,transparent 62%),
+    linear-gradient(var(--nav-glint-angle,168deg),var(--nav-drag-top) 0%,var(--nav-drag-mid) 52%,var(--nav-drag-bot) 100%);
+  transition:box-shadow 150ms var(--ease-ios),filter 150ms var(--ease-ios);
 }
 :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
-  --nav-drag-color:#fffaf2;
-  --nav-drag-alpha:46%;
+  --nav-drag-top:rgba(255,252,246,.34);
+  --nav-drag-mid:rgba(245,228,206,.22);
+  --nav-drag-bot:rgba(232,202,168,.30);
   --nav-drag-glint:rgba(255,255,255,.88);
-  --nav-drag-reflection:rgba(196,144,92,.24);
-  --nav-drag-rim:rgba(255,255,255,.98);
-  --nav-drag-edge:rgba(138,86,52,.36);
-  --nav-drag-bottom-glint:rgba(255,248,238,.62);
-  --nav-drag-shadow:0 6px 16px rgba(59,36,24,.20),0 2px 5px rgba(59,36,24,.12);
+  --nav-drag-reflection:rgba(196,144,92,.28);
+  --nav-drag-specular:rgba(255,255,255,.96);
+  --nav-drag-caustic:rgba(212,164,116,.52);
+  --nav-drag-rim:rgba(255,255,255,.99);
+  --nav-drag-edge:rgba(138,86,52,.48);
+  --nav-drag-bottom-glint:rgba(168,114,72,.44);
+  --nav-drag-inner-glow:rgba(255,248,238,.54);
+  --nav-drag-shadow:0 8px 20px rgba(59,36,24,.18),0 2px 6px rgba(59,36,24,.11);
 }
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
-  --nav-drag-color:#545a66;
-  --nav-drag-alpha:38%;
-  --nav-drag-glint:rgba(242,246,255,.30);
-  --nav-drag-reflection:rgba(204,213,230,.14);
-  --nav-drag-rim:rgba(244,248,255,.90);
-  --nav-drag-edge:rgba(216,224,238,.62);
-  --nav-drag-bottom-glint:rgba(212,220,236,.34);
-  --nav-drag-shadow:0 6px 18px rgba(0,0,0,.46),0 2px 6px rgba(0,0,0,.28);
+  --nav-drag-top:rgba(128,136,154,.30);
+  --nav-drag-mid:rgba(86,92,106,.20);
+  --nav-drag-bot:rgba(66,72,84,.28);
+  --nav-drag-glint:rgba(248,250,255,.32);
+  --nav-drag-reflection:rgba(208,218,236,.18);
+  --nav-drag-specular:rgba(255,255,255,.78);
+  --nav-drag-caustic:rgba(214,224,242,.34);
+  --nav-drag-rim:rgba(248,250,255,.92);
+  --nav-drag-edge:rgba(224,230,242,.68);
+  --nav-drag-bottom-glint:rgba(214,222,238,.42);
+  --nav-drag-inner-glow:rgba(232,238,248,.24);
+  --nav-drag-shadow:0 8px 22px rgba(0,0,0,.46),0 2px 6px rgba(0,0,0,.28);
 }
-@supports (color:color-mix(in srgb,white,transparent)) {
-  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill] {
-    --segment-fill:color-mix(in srgb,var(--nav-drag-color,var(--nav-sel)) var(--nav-drag-alpha,86%),transparent);
-  }
-  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
-    --segment-fill:color-mix(in srgb,var(--nav-drag-color,var(--nav-sel)) var(--nav-drag-alpha,46%),transparent);
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
+  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
+    -webkit-backdrop-filter:blur(10px) saturate(150%);
+    backdrop-filter:blur(10px) saturate(150%);
   }
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
-    -webkit-backdrop-filter:blur(10px) saturate(145%) brightness(1.04);
-    backdrop-filter:blur(10px) saturate(145%) brightness(1.04);
+    -webkit-backdrop-filter:blur(8px) saturate(185%) brightness(1.06);
+    backdrop-filter:blur(8px) saturate(185%) brightness(1.06);
   }
   :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
-    -webkit-backdrop-filter:blur(10px) saturate(140%) brightness(1.12);
-    backdrop-filter:blur(10px) saturate(140%) brightness(1.12);
+    -webkit-backdrop-filter:blur(8px) saturate(175%) brightness(1.18);
+    backdrop-filter:blur(8px) saturate(175%) brightness(1.18);
   }
 }
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more), (forced-colors:active) {
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill],
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
     --segment-fill:var(--nav-sel);
-    --nav-pill-shadow-layer:initial;
+    --nav-pill-shadow-layer:inset 0 0 0 1px var(--segment-border);
   }
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
+    background-color:var(--nav-sel);
     background-image:none;
-  }
-  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
     -webkit-backdrop-filter:none;
     backdrop-filter:none;
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
+    transition:none;
   }
 }
 </style>
@@ -10345,31 +10401,17 @@ function init(){
 
 const touchNavPills=new Map();
 function mountTouchNavPills() {
-  const platform=document.documentElement;
-  const isPhone=platform.hasAttribute('data-phone-touch');
-  const isTablet=platform.hasAttribute('data-ipad');
-  const phoneTouch=matchMedia('(max-width:767px) and (any-pointer:coarse)');
-  const tabletTouch=matchMedia('(min-width:768px) and (min-height:481px) and (any-pointer:coarse)');
   const bottomNav=document.querySelector('.bottom-nav');
   const topNav=document.querySelector('.wide-tabs');
-
-  function enable(group) {
-    if(group&&!touchNavPills.has(group))touchNavPills.set(group,mountTouchNavPill(group));
-  }
-  function update() {
-    if(isPhone||isTablet||phoneTouch.matches)enable(bottomNav);
-    if(isTablet||tabletTouch.matches)enable(topNav);
-  }
-  phoneTouch.addEventListener('change',update);
-  tabletTouch.addEventListener('change',update);
-  update();
+  if(bottomNav&&!touchNavPills.has(bottomNav))touchNavPills.set(bottomNav,mountTouchNavPill(bottomNav));
+  if(topNav&&!touchNavPills.has(topNav))touchNavPills.set(topNav,mountTouchNavPill(topNav));
 }
 
 function mountTouchNavPill(group) {
   const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)');
   const tabs=[...group.querySelectorAll(':scope > button')];
   const active=()=>tabs.find(tab=>tab.getAttribute('aria-current')==='page');
-  const properties=['--nav-drag-x','--nav-drag-y','--nav-drag-width','--nav-drag-height'];
+  const properties=['--nav-drag-x','--nav-drag-y','--nav-drag-width','--nav-drag-height','--nav-glint-x','--nav-glint-angle'];
   const threshold=6;
   const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
   let target,position,velocity=[0,0,0,0,0,0],frame=0,dragFrame=0,lastFrame=0;
@@ -10386,18 +10428,27 @@ function mountTouchNavPill(group) {
     const [left,top,width,height,stretch,lift]=position;
     const extension=Math.max(0,stretch);
     const l=Math.max(0,lift);
-    const cushion=l*4;
-    const liftOffset=l*3.5;
-    return [left-extension/2,top-liftOffset,width+extension,height+cushion,l];
+    const cushionX=l*3;
+    const cushionY=l*2.6;
+    const liftOffset=l*1.8;
+    return [left-(extension+cushionX)/2,top-liftOffset,width+extension+cushionX,height+cushionY,l];
   }
 
   function paint() {
     if(!position)return;
     const [left,top,width,height,lift]=paintedBounds();
+    const groupWidth=Math.max(1,group.clientWidth);
+    const ratio=clamp((left+width/2)/groupWidth,0,1);
+    const vx=gesture?gesture.vx:velocity[0];
+    const tilt=reducedMotion.matches?0:clamp(vx/900,-1,1);
+    const glintX=clamp(50+(ratio-0.5)*56+tilt*18,12,88).toFixed(1)+'%';
+    const glintAngle=(168-tilt*14).toFixed(1)+'deg';
     group.style.setProperty(properties[0],left+'px');
     group.style.setProperty(properties[1],top+'px');
     group.style.setProperty(properties[2],width+'px');
     group.style.setProperty(properties[3],height+'px');
+    group.style.setProperty(properties[4],glintX);
+    group.style.setProperty(properties[5],glintAngle);
     group.toggleAttribute('data-touch-nav-pill-raised',lift>0.08||Boolean(gesture));
   }
 
@@ -10407,6 +10458,7 @@ function mountTouchNavPill(group) {
     velocity=[0,0,0,0,0,0];
     properties.forEach(property=>group.style.removeProperty(property));
     group.removeAttribute('data-touch-nav-pill-raised');
+    group.removeAttribute('data-pill-moving');
   }
 
   function stepDrag(now) {
@@ -10417,12 +10469,12 @@ function mountTouchNavPill(group) {
       gesture.vx*=Math.exp(-20*dt);
       if(Math.abs(gesture.vx)<4)gesture.vx=0;
     }
-    const desiredStretch=reducedMotion.matches?0:clamp(Math.abs(gesture.vx)/28,0,12);
+    const desiredStretch=reducedMotion.matches?0:clamp(Math.abs(gesture.vx)/28,0,14);
     const desiredLift=reducedMotion.matches?0:1;
     // Elastic spring for horizontal stretch and glass lift while tracking finger 1:1
-    velocity[4]+=(320*(desiredStretch-position[4])-26*velocity[4])*dt;
+    velocity[4]+=(360*(desiredStretch-position[4])-27*velocity[4])*dt;
     position[4]+=velocity[4]*dt;
-    velocity[5]+=(480*(desiredLift-position[5])-34*velocity[5])*dt;
+    velocity[5]+=(520*(desiredLift-position[5])-32*velocity[5])*dt;
     position[5]+=velocity[5]*dt;
     paint();
     dragFrame=requestAnimationFrame(stepDrag);
@@ -10439,11 +10491,11 @@ function mountTouchNavPill(group) {
     lastFrame=now;
     while(remaining>0) {
       const dt=Math.min(remaining,1/120);
-      const shapeStretch=Math.min(12,Math.abs(velocity[0])/95);
+      const shapeStretch=Math.min(13,Math.abs(velocity[0])/95);
       const shapeLift=Math.min(0.85,Math.max(Math.abs(velocity[0])/420,Math.abs(target[0]-position[0])/65));
       const desired=[target[0],target[1],target[2],target[3],shapeStretch,shapeLift];
-      const stiffness=[420,420,420,420,340,360];
-      const damping=[34,34,34,34,28,30];
+      const stiffness=[440,440,440,440,380,380];
+      const damping=[32,32,32,32,28,32];
       for(let i=0;i<6;i++) {
         velocity[i]+=(stiffness[i]*(desired[i]-position[i])-damping[i]*velocity[i])*dt;
         position[i]+=velocity[i]*dt;
@@ -10519,7 +10571,7 @@ function mountTouchNavPill(group) {
       vx:0,
       dragging:false
     };
-    if(!reducedMotion.matches)position[5]=Math.max(position[5],0.35);
+    if(!reducedMotion.matches)position[5]=Math.max(position[5],0.45);
     paint();
     if(!reducedMotion.matches)startDragLoop();
   },{passive:true});
@@ -10553,6 +10605,8 @@ function mountTouchNavPill(group) {
       blockClick=true;
       if(dy>=dx) {
         gesture=null;
+        clearTimeout(blockClickTimer);
+        blockClickTimer=setTimeout(()=>{blockClick=false;},350);
         settle();
         return;
       }
@@ -10566,11 +10620,13 @@ function mountTouchNavPill(group) {
     const touch=trackedTouch(event);
     if(!touch)return;
     const wasDragging=gesture.dragging;
+    const releaseVx=gesture.vx;
     if(wasDragging) {
       if(event.cancelable)event.preventDefault();
       follow(touch);
       const bounds=group.getBoundingClientRect();
-      if(touch.clientX>=bounds.left&&touch.clientX<=bounds.right&&touch.clientY>=bounds.top&&touch.clientY<=bounds.bottom) {
+      const slop=44;
+      if(touch.clientX>=bounds.left-slop&&touch.clientX<=bounds.right+slop&&touch.clientY>=bounds.top-slop&&touch.clientY<=bounds.bottom+slop) {
         const [left,,width]=paintedBounds();
         const center=left+width/2;
         const distance=tab=>Math.abs(tab.offsetLeft+tab.offsetWidth/2-center);
@@ -10585,6 +10641,7 @@ function mountTouchNavPill(group) {
     }
     gesture=null;
     if(wasDragging){
+      if(!reducedMotion.matches)velocity[0]=clamp(releaseVx,-1600,1600);
       clearTimeout(blockClickTimer);
       blockClickTimer=setTimeout(()=>{blockClick=false;},350);
     }

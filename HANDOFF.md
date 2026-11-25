@@ -555,3 +555,11 @@
 - Headless Chromium 模擬驗證通過：iPad `820×1180`、iPad Split View `500×1180`、iPhone `393×852`、桌面 `1440×900` 深淺色皆確認單一膠囊，通過慢拖跨兩格停頓放手、反向拖曳、拖出導覽取消、`touchcancel`、垂直捲動取消、快速連點、鍵盤 `Enter` 與減少動態效果。
 - 待驗證：iPad／iPhone 實機 Safari、主畫面 PWA 版實際 `env(safe-area-inset-bottom)` 與 WebKit 雙層 `backdrop-filter` 合成效果。改動留在本機，未推送 GitHub 或發布。
 
+## 2026-11-25 Liquid Glass 底座與選取膠囊光學／動效微調（AI Studio 預覽）
+
+- 導覽底座（`.wide-tabs::after`、`.bottom-nav::after`）降低不透明度並加入雙向高光邊緣，並調柔 `@media (min-width:768px) .app-header` 底色及開放手機可捲動頁籤（課程／今日／學習室）滾過 `.bottom-nav` 後方，使捲動內容色彩與輪廓能透出底座玻璃。
+- 選取膠囊（`::before`）靜止維持低調雙層玻璃與細亮邊（淺色暖白＋棕色輪廓在白底仍清楚，深色銀灰細亮邊）；按住／拖曳立即提升透光度（`saturate`/`brightness` 提高）、邊緣反光與依膠囊位置及速度動態移動的 `--nav-glint-x` / `--nav-glint-angle` 頂底高光；修正 `.btn:hover`/`:active` 造成的文字與圖示縮放偏移。
+- `mountTouchNavPill` 掛載於 `.bottom-nav` 與 `.wide-tabs`，補強放手速度交棒（`velocity[0]`）、`44px` 放手容差、平衡垂直浮起尺寸、垂直滑動取消後的點擊鎖定復原、與彈簧微幅回彈（減少動態時略過伸展與回彈）。
+- 已驗證：`compile_applet`、`lint_applet`、Inline JS 語法檢查、本機 `http://127.0.0.1:3000/` HTTP 200 及 Node 彈簧物理模擬通過（483ms 收斂、約 1px 回彈）。
+- 待驗證：目前環境無 Chrome／Safari 實機或瀏覽器視覺執行工具，iPhone／iPad 深淺色「慢拖跨兩格 → 中途停住 → 放手 → 快速點回」、有色背景捲動透光對比、iPhone／iPad Safari 實際玻璃合成（預期走半透明填色＋`backdrop-filter` 柔化＋局部邊緣高光近似效果，非 SVG 位移折射）及主畫面版 PWA 均列為待驗證；改動留於 AI Studio 預覽，未推送至 StudyOS-test。
+
