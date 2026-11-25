@@ -4439,6 +4439,15 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   --nav-pill-glint:rgba(255,253,249,.62);
   --nav-pill-shadow:rgba(59,36,24,.16);
 }
+/* Mobile bottom nav uses a lighter translucent dock so strong convex lens optics stay on .wide-tabs only. */
+.bottom-nav{
+  --nav-glass-tint:rgba(255,250,242,.38);
+  --nav-glass-rim:rgba(255,255,255,.84);
+  --nav-glass-sheen:rgba(255,255,255,.20);
+  --nav-glass-edge:rgba(115,74,46,.15);
+  --nav-glass-bounce:rgba(255,248,236,.32);
+  --nav-glass-drop:0 6px 18px rgba(59,36,24,.08),0 1px 4px rgba(59,36,24,.05);
+}
 :root[data-theme=dark] :is(.wide-tabs,.bottom-nav){
   --nav-glass-tint:rgba(34,37,44,.28);
   --nav-glass-rim:rgba(244,248,255,.46);
@@ -4448,6 +4457,14 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   --nav-glass-drop:0 10px 28px rgba(0,0,0,.36),0 2px 8px rgba(0,0,0,.24);
   --nav-pill-glint:rgba(240,244,252,.18);
   --nav-pill-shadow:rgba(6,8,12,.34);
+}
+:root[data-theme=dark] .bottom-nav{
+  --nav-glass-tint:rgba(38,41,48,.46);
+  --nav-glass-rim:rgba(244,248,255,.32);
+  --nav-glass-sheen:rgba(255,255,255,.08);
+  --nav-glass-edge:rgba(218,226,240,.16);
+  --nav-glass-bounce:rgba(206,216,236,.10);
+  --nav-glass-drop:0 6px 20px rgba(0,0,0,.28),0 1px 4px rgba(0,0,0,.18);
 }
 @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
   @media(min-width:768px){
@@ -4475,7 +4492,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
     border-color:transparent;
     box-shadow:var(--nav-glass-drop);
   }
-  :is(.wide-tabs,.bottom-nav)::after{
+  .wide-tabs::after{
     background:linear-gradient(160deg,var(--nav-glass-sheen) 0%,transparent 24%,transparent 76%,var(--nav-glass-bounce) 100%),var(--nav-glass-tint);
     -webkit-backdrop-filter:blur(16px) saturate(180%);
     backdrop-filter:blur(16px) saturate(180%);
@@ -4484,8 +4501,12 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
       inset 0 0 0 1px var(--nav-glass-edge);
   }
   .bottom-nav::after{
-    -webkit-backdrop-filter:blur(18px) saturate(185%);
-    backdrop-filter:blur(18px) saturate(185%);
+    background:linear-gradient(165deg,var(--nav-glass-sheen) 0%,transparent 32%,transparent 78%,var(--nav-glass-bounce) 100%),var(--nav-glass-tint);
+    -webkit-backdrop-filter:blur(14px) saturate(145%);
+    backdrop-filter:blur(14px) saturate(145%);
+    box-shadow:inset 0 1px 0 var(--nav-glass-rim),
+      inset 0 -1px 0 var(--nav-glass-bounce),
+      inset 0 0 0 1px var(--nav-glass-edge);
   }
   :is(.wide-tabs,.bottom-nav){
     --nav-pill-shadow-layer:inset 0 0 0 1px var(--segment-border),0 2px 5px var(--nav-pill-shadow);
@@ -4535,6 +4556,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   box-shadow:none !important;
   filter:none !important;
   transform:none !important;
+  text-decoration:none !important;
   -webkit-tap-highlight-color:transparent;
 }
 :is(.wide-tabs,.bottom-nav) > button:active :is(.bn-icon,.bn-label) {
@@ -4546,6 +4568,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 @media (hover:hover) and (pointer:fine) {
   :is(.wide-tabs,.bottom-nav) > button:not([aria-current=page]):hover {
     color:var(--text);
+    text-decoration:none !important;
   }
 }
 :is(.wide-tabs,.bottom-nav)::before {
@@ -4572,7 +4595,8 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   transition-duration:150ms !important;
   transition-timing-function:var(--ease-ios) !important;
 }
-:is(.wide-tabs,.bottom-nav)[data-touch-nav-pill] {
+/* .wide-tabs retains strong convex Liquid Glass lens optics. */
+.wide-tabs[data-touch-nav-pill] {
   --nav-drag-transition:none;
   --nav-drag-top:rgba(255,253,249,.34);
   --nav-drag-mid:rgba(246,230,210,.15);
@@ -4593,7 +4617,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
     inset 0 0 7px var(--nav-drag-inner-glow),
     var(--nav-drag-shadow);
 }
-:root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill] {
+:root[data-theme=dark] .wide-tabs[data-touch-nav-pill] {
   --nav-drag-top:rgba(124,132,148,.24);
   --nav-drag-mid:rgba(74,79,90,.14);
   --nav-drag-bot:rgba(58,63,74,.22);
@@ -4607,7 +4631,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   --nav-drag-edge-caustic:rgba(236,242,255,.28);
   --nav-drag-shadow:0 3px 10px rgba(0,0,0,.36);
 }
-:is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
+.wide-tabs[data-touch-nav-pill]::before {
   background-color:transparent !important;
   background-image:
     radial-gradient(62% 88% at var(--nav-glint-x,50%) 0%,var(--nav-drag-specular) 0%,transparent 62%),
@@ -4615,7 +4639,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
     radial-gradient(115% 135% at 50% 50%,transparent 56%,var(--nav-drag-rim-tint) 94%,var(--nav-drag-specular) 100%),
     linear-gradient(var(--nav-glint-angle,168deg),var(--nav-drag-top) 0%,var(--nav-drag-mid) 50%,var(--nav-drag-bot) 100%);
 }
-:is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
+.wide-tabs[data-touch-nav-pill][data-touch-nav-pill-raised] {
   --nav-drag-top:rgba(255,253,248,.22);
   --nav-drag-mid:rgba(245,228,206,.09);
   --nav-drag-bot:rgba(232,202,168,.18);
@@ -4635,7 +4659,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
     inset 0 0 11px var(--nav-drag-inner-glow),
     var(--nav-drag-shadow);
 }
-:root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised] {
+:root[data-theme=dark] .wide-tabs[data-touch-nav-pill][data-touch-nav-pill-raised] {
   --nav-drag-top:rgba(146,154,172,.20);
   --nav-drag-mid:rgba(86,92,106,.10);
   --nav-drag-bot:rgba(68,74,88,.18);
@@ -4649,22 +4673,87 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   --nav-drag-edge-caustic:rgba(244,248,255,.52);
   --nav-drag-shadow:0 10px 26px rgba(0,0,0,.52),0 3px 8px rgba(0,0,0,.30);
 }
+/* .bottom-nav shares drag + spring physics but uses lighter glass without heavy convex magnification. */
+.bottom-nav[data-touch-nav-pill] {
+  --nav-drag-transition:none;
+  --nav-drag-top:rgba(255,253,249,.68);
+  --nav-drag-mid:rgba(246,232,214,.46);
+  --nav-drag-bot:rgba(236,216,192,.54);
+  --nav-drag-rim:rgba(255,255,255,.92);
+  --nav-drag-edge:rgba(138,86,52,.30);
+  --nav-drag-bottom-glint:rgba(188,134,88,.24);
+  --nav-drag-inner-glow:rgba(255,251,244,.28);
+  --nav-drag-shadow:0 2px 8px rgba(59,36,24,.10);
+  --nav-pill-shadow-layer:inset 0 0 0 1px var(--nav-drag-edge),
+    inset 0 1px 0 var(--nav-drag-rim),
+    inset 0 -1px 0 var(--nav-drag-bottom-glint),
+    inset 0 0 4px var(--nav-drag-inner-glow),
+    var(--nav-drag-shadow);
+}
+:root[data-theme=dark] .bottom-nav[data-touch-nav-pill] {
+  --nav-drag-top:rgba(104,110,124,.38);
+  --nav-drag-mid:rgba(68,72,82,.26);
+  --nav-drag-bot:rgba(54,58,68,.32);
+  --nav-drag-rim:rgba(244,248,255,.36);
+  --nav-drag-edge:rgba(214,222,238,.28);
+  --nav-drag-bottom-glint:rgba(200,210,230,.16);
+  --nav-drag-inner-glow:rgba(230,236,248,.10);
+  --nav-drag-shadow:0 2px 8px rgba(0,0,0,.28);
+}
+.bottom-nav[data-touch-nav-pill]::before {
+  background-color:transparent !important;
+  background-image:
+    radial-gradient(56% 78% at var(--nav-glint-x,50%) 0%,var(--nav-drag-rim) 0%,transparent 65%),
+    linear-gradient(var(--nav-glint-angle,172deg),var(--nav-drag-top) 0%,var(--nav-drag-mid) 52%,var(--nav-drag-bot) 100%);
+}
+.bottom-nav[data-touch-nav-pill][data-touch-nav-pill-raised] {
+  --nav-drag-top:rgba(255,253,248,.60);
+  --nav-drag-mid:rgba(245,228,206,.38);
+  --nav-drag-bot:rgba(232,206,176,.46);
+  --nav-drag-rim:rgba(255,255,255,.98);
+  --nav-drag-edge:rgba(138,86,52,.42);
+  --nav-drag-bottom-glint:rgba(176,120,76,.34);
+  --nav-drag-inner-glow:rgba(255,250,242,.38);
+  --nav-drag-shadow:0 6px 16px rgba(59,36,24,.15),0 2px 5px rgba(59,36,24,.09);
+}
+:root[data-theme=dark] .bottom-nav[data-touch-nav-pill][data-touch-nav-pill-raised] {
+  --nav-drag-top:rgba(124,132,148,.42);
+  --nav-drag-mid:rgba(82,88,100,.30);
+  --nav-drag-bot:rgba(64,70,82,.36);
+  --nav-drag-rim:rgba(250,252,255,.58);
+  --nav-drag-edge:rgba(228,234,248,.46);
+  --nav-drag-bottom-glint:rgba(210,220,238,.26);
+  --nav-drag-inner-glow:rgba(236,242,252,.16);
+  --nav-drag-shadow:0 6px 18px rgba(0,0,0,.38),0 2px 6px rgba(0,0,0,.22);
+}
 @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
-  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
+  .wide-tabs[data-touch-nav-pill]::before {
     -webkit-backdrop-filter:blur(8px) saturate(195%) brightness(1.04) contrast(1.03);
     backdrop-filter:blur(8px) saturate(195%) brightness(1.04) contrast(1.03);
   }
-  :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
+  :root[data-theme=dark] .wide-tabs[data-touch-nav-pill]::before {
     -webkit-backdrop-filter:blur(8px) saturate(185%) brightness(1.14) contrast(1.04);
     backdrop-filter:blur(8px) saturate(185%) brightness(1.14) contrast(1.04);
   }
-  :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
+  .wide-tabs[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
     -webkit-backdrop-filter:blur(7px) saturate(215%) brightness(1.08) contrast(1.05);
     backdrop-filter:blur(7px) saturate(215%) brightness(1.08) contrast(1.05);
   }
-  :root[data-theme=dark] :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
+  :root[data-theme=dark] .wide-tabs[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
     -webkit-backdrop-filter:blur(7px) saturate(200%) brightness(1.22) contrast(1.06);
     backdrop-filter:blur(7px) saturate(200%) brightness(1.22) contrast(1.06);
+  }
+  .bottom-nav[data-touch-nav-pill]::before {
+    -webkit-backdrop-filter:blur(6px) saturate(130%);
+    backdrop-filter:blur(6px) saturate(130%);
+  }
+  .bottom-nav[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
+    -webkit-backdrop-filter:blur(6px) saturate(145%) brightness(1.02);
+    backdrop-filter:blur(6px) saturate(145%) brightness(1.02);
+  }
+  :root[data-theme=dark] .bottom-nav[data-touch-nav-pill][data-touch-nav-pill-raised]::before {
+    -webkit-backdrop-filter:blur(6px) saturate(140%) brightness(1.06);
+    backdrop-filter:blur(6px) saturate(140%) brightness(1.06);
   }
 }
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more), (forced-colors:active) {
@@ -4690,6 +4779,422 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
   :is(#touch-nav-spec,.wide-tabs,.bottom-nav)[data-touch-nav-pill][data-pill-ready][data-pill-moving]::before,
   :is(.wide-tabs,.bottom-nav)[data-touch-nav-pill]::before {
     transition:none !important;
+  }
+}
+</style>
+<style id="studyos-motion-system">
+/* Centralized motion rhythm, curves and thin-glass secondary tokens. */
+:root {
+  --motion-press-dur:105ms;
+  --motion-release-dur:235ms;
+  --motion-spring:cubic-bezier(.22,1.24,.36,1);
+  --motion-ease:cubic-bezier(.2,.8,.25,1);
+  --motion-dialog-in:200ms;
+  --motion-dialog-out:145ms;
+  --press-scale-btn:.968;
+  --press-scale-card:.988;
+  --press-scale-option:.992;
+
+  --seg-dock-bg:rgba(235,224,210,.64);
+  --seg-dock-edge:rgba(138,86,52,.13);
+  --seg-dock-highlight:rgba(255,255,255,.60);
+  --seg-pill-bg:linear-gradient(180deg,rgba(255,253,249,.90) 0%,rgba(249,240,228,.78) 100%);
+  --seg-pill-rim:rgba(255,255,255,.94);
+  --seg-pill-edge:rgba(138,86,52,.24);
+  --seg-pill-shadow:0 1px 4px rgba(59,36,24,.10),0 0 0 .5px rgba(138,86,52,.08);
+}
+:root[data-theme=dark] {
+  --seg-dock-bg:rgba(48,50,57,.70);
+  --seg-dock-edge:rgba(255,255,255,.10);
+  --seg-dock-highlight:rgba(255,255,255,.09);
+  --seg-pill-bg:linear-gradient(180deg,rgba(88,92,102,.76) 0%,rgba(66,70,79,.66) 100%);
+  --seg-pill-rim:rgba(246,249,255,.26);
+  --seg-pill-edge:rgba(220,228,242,.24);
+  --seg-pill-shadow:0 2px 6px rgba(0,0,0,.28);
+}
+
+/* ── Secondary segmented controls: thin translucent dock + spring-driven pill, zero ghost fills ── */
+:is(#panel-cal .view-toggle,.account-theme,.study-mode-options) {
+  background:var(--seg-dock-bg) !important;
+  border-radius:var(--r-pill);
+  box-shadow:inset 0 0 0 1px var(--seg-dock-edge),inset 0 1px 0 var(--seg-dock-highlight);
+}
+:is(#panel-cal .view-toggle,.account-theme,.study-mode-options)::before {
+  z-index:0 !important;
+  border-radius:var(--r-pill) !important;
+  background-color:transparent !important;
+  background-image:var(--seg-pill-bg) !important;
+  box-shadow:inset 0 0 0 1px var(--seg-pill-edge),inset 0 1px 0 var(--seg-pill-rim),var(--seg-pill-shadow) !important;
+}
+:is(#touch-nav-spec,#panel-cal .view-toggle,.account-theme,.study-mode-options)[data-pill-ready]::before,
+:is(#touch-nav-spec,#panel-cal .view-toggle,.account-theme,.study-mode-options)[data-pill-ready][data-pill-moving]::before {
+  inset:0 auto auto 0 !important;
+  width:var(--nav-drag-width,var(--pill-width)) !important;
+  height:var(--nav-drag-height,var(--pill-height)) !important;
+  transform:translate3d(var(--nav-drag-x,var(--pill-x)),var(--nav-drag-y,var(--pill-y)),0) !important;
+  transition:none !important;
+  will-change:transform,width,height;
+}
+:is(#panel-cal .view-toggle,.account-theme,.study-mode-options) > :is(button,label),
+:is(#panel-cal .view-toggle,.account-theme,.study-mode-options) > :is(button,label):is(:hover,:active,:focus,.active,[aria-pressed=true],:has(:checked)) {
+  position:relative;
+  z-index:1;
+  background:transparent !important;
+  background-color:transparent !important;
+  box-shadow:none !important;
+  filter:none !important;
+  transform:none !important;
+  text-decoration:none !important;
+  -webkit-tap-highlight-color:transparent;
+}
+:is(#panel-cal .view-toggle,.account-theme,.study-mode-options) > :is(button,label) {
+  border-radius:var(--r-pill);
+  color:var(--segment-text);
+  transition:color 150ms var(--motion-ease);
+}
+:is(#panel-cal .view-toggle,.account-theme,.study-mode-options) > :is(button[aria-pressed=true],button.active,label:has(:checked)) {
+  color:var(--segment-selected) !important;
+  font-weight:650;
+}
+@media (hover:hover) and (pointer:fine) {
+  :is(#panel-cal .view-toggle,.account-theme,.study-mode-options) > :is(button,label):not([aria-pressed=true],.active,:has(:checked)):hover {
+    color:var(--text) !important;
+  }
+}
+:is(#panel-cal .view-toggle,.account-theme,.study-mode-options) > button:focus-visible,
+.study-mode-options > label:has(:focus-visible) {
+  outline:2px dashed var(--ui-focus);
+  outline-offset:-2px;
+}
+
+/* Alignment for labels, count badges and narrow viewports inside secondary segmented controls */
+#today-task-tabs {
+  align-items:stretch;
+  padding:3px;
+}
+#today-task-tabs .vt-btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1.2;
+}
+#study-room .study-home-modes,
+#study-room .paper-archive-modes {
+  align-items:stretch;
+  padding:3px;
+}
+#study-room .study-home-modes button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.38em;
+  min-height:44px;
+  line-height:1.2;
+}
+.paper-mode-count {
+  display:inline-grid;
+  place-items:center;
+  flex:none;
+  min-inline-size:2.2ch;
+  padding:1px .45em;
+  border-radius:var(--r-pill);
+  background:color-mix(in srgb,var(--surface) 76%,transparent);
+  border:1px solid var(--border-lt);
+  font-size:.8em;
+  line-height:1.35;
+  font-variant-numeric:tabular-nums;
+}
+:root[data-theme=dark] .paper-mode-count {
+  background:color-mix(in srgb,var(--bg) 56%,transparent);
+}
+@media (max-width:480px) {
+  #study-room .paper-archive-modes {
+    width:100%;
+  }
+  #study-room .paper-archive-modes button {
+    padding-inline:8px;
+    font-size:.875rem;
+    gap:.3em;
+  }
+}
+.paper-result-filters {
+  display:inline-flex;
+  flex-wrap:nowrap;
+  align-items:stretch;
+  gap:2px;
+  padding:3px;
+  max-width:100%;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:none;
+}
+.paper-result-filters .btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.35em;
+  flex:none;
+  min-height:40px;
+  padding:0 10px;
+  border:0;
+  line-height:1.2;
+  white-space:nowrap;
+}
+@media (pointer:coarse) {
+  .paper-result-filters .btn {
+    min-height:44px;
+  }
+}
+.paper-review-count {
+  flex:none;
+  font-size:.86em;
+  opacity:.84;
+  font-variant-numeric:tabular-nums;
+}
+.study-modes .study-mode-options label {
+  display:inline-flex;
+  align-items:center;
+  min-height:40px;
+  padding-inline:12px;
+}
+@media (pointer:coarse) {
+  .study-modes .study-mode-options label {
+    min-height:44px;
+  }
+}
+
+/* ── Unified tactile press + spring rebound on action buttons ── */
+:is(.btn,.act-btn,.popup-close,.wide-close,.cal-nav button,.fab-manage,.exam-pen-btn,.del-btn,.rp-skip,.rp-restore,.exam-progress,#account-toggle,#calendar-more>summary,.schedule-time-trigger,#paper-exam-progress,.paper-review-link) {
+  transition:transform var(--motion-release-dur) var(--motion-spring),
+    background-color 150ms var(--motion-ease),
+    border-color 150ms var(--motion-ease),
+    box-shadow 150ms var(--motion-ease),
+    color 140ms var(--motion-ease),
+    opacity 140ms var(--motion-ease),
+    filter 120ms var(--motion-ease);
+}
+:is(.btn,.act-btn,.popup-close,.wide-close,.cal-nav button,.fab-manage,.exam-pen-btn,.del-btn,.rp-skip,.rp-restore,.exam-progress,#account-toggle,#calendar-more>summary,.schedule-time-trigger,#paper-exam-progress,.paper-review-link):active:not(:disabled) {
+  transform:translate3d(0,1px,0) scale(var(--press-scale-btn)) !important;
+  filter:brightness(.96);
+  transition-duration:var(--motion-press-dur);
+  transition-timing-function:var(--motion-ease);
+}
+/* Ensure segmented control buttons never inherit .btn press scale or brightness darkening. */
+:is(#touch-nav-spec,.wide-tabs,.bottom-nav,#panel-cal .view-toggle,.account-theme,.study-mode-options) > :is(button,label):active:not(:disabled) {
+  transform:none !important;
+  filter:none !important;
+}
+
+/* ── Interactive rows, cards & answer choices ── */
+:is(.wide-course-row,.course-card,.todo-card,.cal-cell:not(.empty),.memo-card,#paper-result-list button,.paper-exam-history button,.past-question-link,.eo-row:not(.is-static),.ed-row:not(.is-static)) {
+  transition:transform var(--motion-release-dur) var(--motion-spring),
+    background-color 150ms var(--motion-ease),
+    border-color 150ms var(--motion-ease),
+    box-shadow 150ms var(--motion-ease);
+}
+:is(.wide-course-row,.course-card,.todo-card,.cal-cell:not(.empty),.memo-card,#paper-result-list button,.paper-exam-history button,.past-question-link,.eo-row:not(.is-static),.ed-row:not(.is-static)):active:not(:disabled) {
+  transform:translate3d(0,1px,0) scale(var(--press-scale-card)) !important;
+  transition-duration:var(--motion-press-dur);
+  transition-timing-function:var(--motion-ease);
+}
+#panel-r .day-card.day-lesson {
+  transition:transform var(--motion-release-dur) var(--motion-spring),
+    background-color 150ms var(--motion-ease),
+    border-color 150ms var(--motion-ease);
+}
+#panel-r .day-card.day-lesson:has(.day-lesson-details:active) {
+  transform:translate3d(0,1px,0) scale(var(--press-scale-card));
+  transition-duration:var(--motion-press-dur);
+  transition-timing-function:var(--motion-ease);
+}
+#panel-r .day-lesson-details:active {
+  transform:none !important;
+}
+.past-answer-choices label {
+  cursor:pointer;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform var(--motion-release-dur) var(--motion-spring),
+    background-color 150ms var(--motion-ease),
+    box-shadow 150ms var(--motion-ease);
+}
+.past-answer-choices label:active {
+  transform:translate3d(0,1px,0) scale(var(--press-scale-option));
+  background:var(--segment-press);
+  transition-duration:var(--motion-press-dur);
+  transition-timing-function:var(--motion-ease);
+}
+.past-answer-choices label:has(:checked) {
+  background:var(--selection-fill);
+  color:var(--text);
+  box-shadow:inset 0 0 0 1.5px var(--selection-edge);
+}
+.past-answer-choices label:has(:checked) .paper-choice-code {
+  background:var(--accent-tint);
+  border-color:var(--selection-edge);
+  color:var(--accent-h);
+}
+.past-answer-choices label:has(:focus-visible) {
+  outline:2px dashed var(--ui-focus);
+  outline-offset:-2px;
+}
+
+/* ── Exam question map & mark contrast (light + dark) ── */
+:root[data-theme=dark] .paper-exam-grid .btn[data-answered=true]:not([aria-current]) {
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--selection-edge) 72%,transparent);
+}
+.paper-exam-grid .btn[aria-current="step"] {
+  background:var(--selection-fill);
+  color:var(--text);
+  box-shadow:inset 0 0 0 2px var(--selection-edge);
+  font-weight:700;
+}
+:is(.paper-exam-tools .btn,[data-study-action=paper-practice-mark])[aria-pressed=true] {
+  background:var(--selection-fill);
+  color:var(--text);
+  box-shadow:inset 0 0 0 1.5px var(--selection-edge);
+  font-weight:650;
+}
+.paper-exam-triangle {
+  color:var(--review-mark);
+  font-weight:700;
+}
+
+/* ── Dialogs, confirm overlay, popovers & mobile bottom sheets ── */
+#confirm-backdrop {
+  display:flex;
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity var(--motion-dialog-out) var(--motion-ease),visibility 0s linear var(--motion-dialog-out);
+}
+#confirm-backdrop.open {
+  visibility:visible;
+  opacity:1;
+  pointer-events:auto;
+  transition:opacity var(--motion-dialog-in) var(--motion-ease),visibility 0s;
+}
+#confirm-dialog {
+  opacity:0;
+  transform:translate3d(0,10px,0) scale(.976);
+  transition:transform var(--motion-dialog-out) var(--motion-ease),opacity var(--motion-dialog-out) var(--motion-ease);
+}
+#confirm-backdrop.open #confirm-dialog {
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+  transition:transform var(--motion-dialog-in) var(--motion-spring),opacity var(--motion-dialog-in) var(--motion-ease);
+}
+.modal-backdrop:not([style*="display:none"]) {
+  animation:studyos-fade-in 160ms var(--motion-ease) both;
+}
+.modal-backdrop:not([style*="display:none"]) .modal {
+  animation:studyos-sheet-in var(--motion-dialog-in) var(--motion-spring) both;
+}
+@keyframes studyos-sheet-in {
+  from { opacity:0; transform:translate3d(0,10px,0) scale(.976); }
+  to { opacity:1; transform:translate3d(0,0,0) scale(1); }
+}
+@keyframes studyos-mobile-sheet-in {
+  from { opacity:0; transform:translate3d(0,16px,0); }
+  to { opacity:1; transform:translate3d(0,0,0); }
+}
+@media (max-width:767px) {
+  #panel-r.mob-active[data-mobile-day=detail] {
+    animation:studyos-mobile-sheet-in var(--motion-dialog-in) var(--motion-spring) both;
+  }
+}
+@supports (transition-behavior:allow-discrete) {
+  dialog[data-app-dialog]:not(.wide-legacy) {
+    opacity:0;
+    transform:translate3d(0,10px,0) scale(.978);
+    transition:opacity var(--motion-dialog-out) var(--motion-ease),
+      transform var(--motion-dialog-out) var(--motion-ease),
+      overlay var(--motion-dialog-out) allow-discrete,
+      display var(--motion-dialog-out) allow-discrete;
+  }
+  dialog[data-app-dialog][open]:not(.wide-legacy) {
+    animation:none;
+    opacity:1;
+    transform:translate3d(0,0,0) scale(1);
+    transition:opacity var(--motion-dialog-in) var(--motion-ease),
+      transform var(--motion-dialog-in) var(--motion-spring),
+      overlay var(--motion-dialog-in) allow-discrete,
+      display var(--motion-dialog-in) allow-discrete;
+  }
+  @starting-style {
+    dialog[data-app-dialog][open]:not(.wide-legacy) {
+      opacity:0;
+      transform:translate3d(0,10px,0) scale(.978);
+    }
+  }
+  dialog[data-app-dialog]:not(.wide-legacy)::backdrop {
+    opacity:0;
+    transition:opacity var(--motion-dialog-out) var(--motion-ease),
+      overlay var(--motion-dialog-out) allow-discrete,
+      display var(--motion-dialog-out) allow-discrete;
+  }
+  dialog[data-app-dialog][open]:not(.wide-legacy)::backdrop {
+    animation:none;
+    opacity:1;
+    transition:opacity var(--motion-dialog-in) var(--motion-ease),
+      overlay var(--motion-dialog-in) allow-discrete,
+      display var(--motion-dialog-in) allow-discrete;
+  }
+  @starting-style {
+    dialog[data-app-dialog][open]:not(.wide-legacy)::backdrop {
+      opacity:0;
+    }
+  }
+  @media (max-width:767px) and (pointer:coarse), (orientation:landscape) and (max-height:480px) and (pointer:coarse) {
+    html:not([data-ipad]) #paper-exam-map-dialog {
+      transform:translate3d(0,22px,0);
+    }
+    html:not([data-ipad]) #paper-exam-map-dialog[open] {
+      transform:translate3d(0,0,0);
+    }
+    @starting-style {
+      html:not([data-ipad]) #paper-exam-map-dialog[open] {
+        opacity:0;
+        transform:translate3d(0,22px,0);
+      }
+    }
+  }
+}
+
+/* ── Accessibility: Reduced Transparency & Reduced Motion ── */
+@media (prefers-reduced-transparency:reduce), (prefers-contrast:more), (forced-colors:active) {
+  :is(#panel-cal .view-toggle,.account-theme,.study-mode-options) {
+    background:var(--sunken) !important;
+    box-shadow:inset 0 0 0 1px var(--border) !important;
+  }
+  :is(#panel-cal .view-toggle,.account-theme,.study-mode-options)::before {
+    background-image:none !important;
+    background-color:var(--segment-fill) !important;
+    box-shadow:inset 0 0 0 1px var(--segment-border) !important;
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  :is(#panel-cal .view-toggle,.account-theme,.study-mode-options)::before {
+    transition:none !important;
+  }
+  :is(.btn,.act-btn,.popup-close,.wide-close,.cal-nav button,.fab-manage,.exam-pen-btn,.del-btn,.rp-skip,.rp-restore,.exam-progress,#account-toggle,#calendar-more>summary,.schedule-time-trigger,#paper-exam-progress,.paper-review-link,.wide-course-row,.course-card,.todo-card,.cal-cell,.memo-card,#paper-result-list button,.paper-exam-history button,.past-question-link,.eo-row,.ed-row,#panel-r .day-card.day-lesson,.past-answer-choices label) {
+    transition:none !important;
+  }
+  :is(.btn,.act-btn,.popup-close,.wide-close,.cal-nav button,.fab-manage,.exam-pen-btn,.del-btn,.rp-skip,.rp-restore,.exam-progress,#account-toggle,#calendar-more>summary,.schedule-time-trigger,#paper-exam-progress,.paper-review-link,.wide-course-row,.course-card,.todo-card,.cal-cell,.memo-card,#paper-result-list button,.paper-exam-history button,.past-question-link,.eo-row,.ed-row,.past-answer-choices label):active:not(:disabled),
+  #panel-r .day-card.day-lesson:has(.day-lesson-details:active) {
+    transform:none !important;
+  }
+  #confirm-backdrop,
+  #confirm-dialog,
+  .modal-backdrop:not([style*="display:none"]),
+  .modal-backdrop:not([style*="display:none"]) .modal,
+  #panel-r.mob-active[data-mobile-day=detail],
+  dialog[data-app-dialog]:not(.wide-legacy),
+  dialog[data-app-dialog]:not(.wide-legacy)::backdrop {
+    animation:none !important;
+    transition:none !important;
+    transform:none !important;
   }
 }
 </style>
@@ -10808,6 +11313,71 @@ function mountTouchNavPill(group) {
 const pillMotion=(()=>{
   const selector='.bottom-nav,.wide-tabs,#panel-cal .view-toggle,.account-theme,.study-mode-options';
   const mounted=new Map();
+  const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)');
+  const dragProps=['--nav-drag-x','--nav-drag-y','--nav-drag-width','--nav-drag-height'];
+  function createSegSpring(group){
+    let target,position,velocity=[0,0,0,0],frame=0,lastFrame=0;
+    function paint(){
+      if(!position)return;
+      group.style.setProperty(dragProps[0],position[0]+'px');
+      group.style.setProperty(dragProps[1],position[1]+'px');
+      group.style.setProperty(dragProps[2],Math.max(1,position[2])+'px');
+      group.style.setProperty(dragProps[3],Math.max(1,position[3])+'px');
+    }
+    function reset(){
+      cancelAnimationFrame(frame);
+      frame=0;
+      position=target?.slice();
+      velocity=[0,0,0,0];
+      dragProps.forEach(prop=>group.style.removeProperty(prop));
+      group.removeAttribute('data-pill-moving');
+    }
+    function tick(now){
+      if(!target||!position||reducedMotion.matches){reset();return;}
+      let remaining=Math.min(0.035,Math.max(0,(now-lastFrame)/1000));
+      lastFrame=now;
+      while(remaining>0){
+        const dt=Math.min(remaining,1/120);
+        for(let i=0;i<4;i++){
+          velocity[i]+=(460*(target[i]-position[i])-29*velocity[i])*dt;
+          position[i]+=velocity[i]*dt;
+        }
+        remaining-=dt;
+      }
+      const done=position.every((v,i)=>Math.abs(v-target[i])<0.15&&Math.abs(velocity[i])<3.5);
+      if(done){reset();return;}
+      paint();
+      frame=requestAnimationFrame(tick);
+    }
+    return {
+      align(values,animate){
+        target=values.slice();
+        if(!animate||!position||reducedMotion.matches){
+          reset();
+          return;
+        }
+        paint();
+        if(!frame){
+          lastFrame=performance.now();
+          frame=requestAnimationFrame(tick);
+        }
+      },
+      seedVelocity(v){if(Array.isArray(v)&&v.length===4)velocity=v.slice();},
+      velocity(){return velocity.slice();},
+      destroy(){
+        cancelAnimationFrame(frame);
+        frame=0;
+        dragProps.forEach(prop=>group.style.removeProperty(prop));
+      }
+    };
+  }
+  reducedMotion.addEventListener('change',()=>{
+    if(!reducedMotion.matches)return;
+    for(const [group,state] of mounted){
+      group.removeAttribute('data-pill-moving');
+      if(state.geometry&&state.spring)state.spring.align(state.geometry,false);
+    }
+  });
   function update(group,animate){
     const state=mounted.get(group);
     const selected=group.querySelector('[aria-current=page],[aria-pressed=true],label:has(input:checked)');
@@ -10823,7 +11393,7 @@ const pillMotion=(()=>{
       values=values.map(value=>Math.round(value*10)/10);
     }
     if(!values[2]||!values[3]||values.every((value,i)=>value===state.geometry?.[i]))return;
-    // CSS retargets from the position and width currently being rendered.
+    // Spring retargets from the position and width currently being rendered.
     place(group,state,values,animate&&!!state.geometry);
   }
   function place(group,state,values,animate=false){
@@ -10831,7 +11401,9 @@ const pillMotion=(()=>{
     group.setAttribute('data-pill-ready','');
     ['x','y','width','height'].forEach((key,i)=>group.style.setProperty('--pill-'+key,values[i]+'px'));
     state.geometry=values;
-    touchNavPills.get(group)?.align(values,animate);
+    const touchNav=touchNavPills.get(group);
+    if(touchNav)touchNav.align(values,animate);
+    else state.spring?.align(values,animate);
   }
   function capture(root){
     const previous=new Map();
@@ -10840,7 +11412,8 @@ const pillMotion=(()=>{
       const style=getComputedStyle(group,'::before'),matrix=new DOMMatrixReadOnly(style.transform);
       previous.set(group.dataset.pillKey,{
         geometry:[matrix.m41,matrix.m42,parseFloat(style.width),parseFloat(style.height)],scroll:group.scrollLeft,
-        focused:group.contains(document.activeElement)
+        focused:group.contains(document.activeElement),
+        velocity:mounted.get(group)?.spring?.velocity()||null
       });
     }
     return previous;
@@ -10860,8 +11433,9 @@ const pillMotion=(()=>{
   return {
     capture,
     mount(root,previous){
-      for(const [group,{observer,options}] of mounted){
+      for(const [group,{observer,options,spring}] of mounted){
         if(group.isConnected)continue;
+        spring?.destroy();
         observer.disconnect();
         resize.unobserve(group);
         for(const option of options)resize.unobserve(option);
@@ -10878,16 +11452,16 @@ const pillMotion=(()=>{
           }
           update(group,records.some(record=>record.type==='attributes'));
         });
-        const state={observer,options,geometry:null};
+        const spring=touchNavPills.has(group)?null:createSegSpring(group);
+        const state={observer,options,geometry:null,spring};
         mounted.set(group,state);
         observer.observe(group,{subtree:true,childList:true,attributes:true,attributeFilter:['aria-pressed','aria-current']});
         group.addEventListener('change',()=>update(group,true));
         const prior=previous?.get(group.dataset.pillKey);
         if(prior&&group.offsetWidth){
           group.scrollLeft=prior.scroll;
-          place(group,state,prior.geometry);
-          // Give the rebuilt pseudo-element a rendered start before retargeting.
-          void getComputedStyle(group,'::before').transform;
+          place(group,state,prior.geometry,false);
+          if(prior.velocity&&spring)spring.seedVelocity(prior.velocity);
           update(group,true);
           if(prior.focused)group.querySelector('[aria-pressed=true]')?.focus({preventScroll:true});
         }else update(group,false);
@@ -11505,7 +12079,7 @@ const studyRoom=(()=>{
   }
   function subjectCards(){
     const resume=session&&session.index<session.queue.length;
-    draw('學習室','<div class="study-mode-options study-home-modes" role="group" aria-label="學習室模式">'+
+    draw('學習室','<div class="study-mode-options study-home-modes" data-pill-key="study-home" role="group" aria-label="學習室模式">'+
       [['knowledge','知識庫'],['papers','考古題']].map(([mode,label])=>
         '<button type="button" data-study-action="home-mode" data-mode="'+mode+'" aria-pressed="'+(mode===homeMode)+'">'+label+'</button>').join('')+
       '</div><div id="paper-home-tools" class="study-actions" '+(homeMode==='papers'?'':'hidden')+'>'+

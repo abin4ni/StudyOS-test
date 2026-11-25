@@ -578,4 +578,11 @@
 - **技術限制註記**：iPhone／iPad Safari 不支援 `backdrop-filter: url(#svg-filter)` 位移折射，本實作採用透明填色、雙層背景柔化與動態邊緣高光／折射光暈呈現近似 Liquid Glass 效果。
 - **待驗證**：本機環境無 Chrome／Safari／Playwright 瀏覽器執行工具，iPhone（`393×852`）與 iPad（`820×1180`）深淺色可操作視覺檢視、有色背景捲動透光、「按住 → 慢拖跨兩格 → 中途停住 → 放手」手勢及 Safari／PWA 實機合成均列為待驗證（可由開發預覽網址實機操作驗收）。改動保留於 AI Studio 預覽，未推送至 `StudyOS-test`。
 
+## 2026-11-25 全站動效系統與共用互動手感統一（StudyOS-test AI Studio 預覽）
 
+- **主導覽分層（`.wide-tabs` 保留強凸透鏡、`.bottom-nav` 採較輕玻璃）**：將 `#nav-glass-plus` 與 `#touch-nav-pill-trial` 的強凸透鏡（`saturate(195%–215%) brightness(1.04–1.22) contrast(1.03–1.06)`、明顯高光邊緣與焦散光暈）僅保留於 iPad／桌面頂部導覽 `.wide-tabs`；`.bottom-nav` 沿用共用 `mountTouchNavPill` 跟手拖曳與彈簧落位，並改用較輕半透明底座（`blur(14px) saturate(145%)`）與柔和膠囊高光。桌面導覽 hover 維持無底線。
+- **集中式動效與薄玻璃變數（`#studyos-motion-system`）**：於 `:root` 與 `:root[data-theme=dark]` 集中定義 `--motion-press-dur`（`105ms`）、`--motion-release-dur`（`235ms`）、`--motion-spring`、`--motion-dialog-in`/`out`、`--press-scale-*` 與 `--seg-dock-*`/`--seg-pill-*`。
+- **次要切換膠囊（薄透玻璃＋共用彈簧滑動）**：升級 `pillMotion`（`createSegSpring`、`k=460, c=29`）並為 `.study-home-modes` 補上 `data-pill-key="study-home"`，讓行事曆月／週（`#panel-cal .view-toggle`）、今日每日作業／待辦清單（`#today-task-tabs`）、學習室知識庫／考古題（`.study-home-modes`）、考古題歷屆試卷／混合刷題／錯題本（`.paper-archive-modes`）、檢討狀態篩選（`.paper-result-filters`）、批匯篩選（`#paper-batch-filters`）與帳號淺／深色切換（`.account-theme`）皆平滑滑動、輕微回彈、即時中斷轉向，並清除子按鈕殘留底色／Ghost Fill。調整 `.paper-mode-count`、`min-inline-size` 與篩選標籤置中對齊。
+- **按鈕、課堂列、卡片、選項與彈窗手感**：統一「新增」「儲存」「下一題」「交卷」及共用 `.btn`／`.act-btn`／`.popup-close`／`.cal-nav button` 按壓微縮下沉與輕柔回彈（排除分段膠囊子按鈕本身）；`.wide-course-row`、`#panel-r .day-card.day-lesson`、`.course-card`、`.todo-card`、`.memo-card`、`.past-question-link` 與 `.past-answer-choices label` 加入清楚按壓回饋且維持題幹與選項位置穩定。補齊深色模式題號表已答格邊框與「▲ 已標記」對比。`#confirm-backdrop`、`.modal`、`dialog[data-app-dialog]`（`@starting-style` + `allow-discrete` 進退場）、手機 `#paper-exam-map-dialog` 與 `#panel-r.mob-active[data-mobile-day=detail]` 採短促位移與淡入淡出。尊重 `prefers-reduced-motion: reduce`，停用彈性與滑動同時完整保留選取狀態。
+- **本機靜態與邏輯檢查**：`compile_applet`、`lint_applet`、Inline `<script>` `vm.Script` 語法檢查、`<style>` 大括號平衡檢查、Node 彈簧收斂模擬及 `http://127.0.0.1:3000/` HTTP 200 檢查通過（未改動 Firestore 規則或 Firebase 連線設定）。
+- **待驗證（本環境無瀏覽器／實機工具）**：Chrome／Safari 模擬尺寸（`393px`、`820px`、`1440px`）深淺色實測主導覽、月／週切換、今日清單、考古題分頁、選答與交卷彈窗、手機垂直捲動、連續切換無殘影、窄版對齊，以及 iPhone／iPad Safari 與主畫面版實機效果皆待由預覽網址實際操作驗證；改動留於 AI Studio 預覽，未推送或合併至正式站。
