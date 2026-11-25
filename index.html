@@ -4584,6 +4584,7 @@ input::placeholder,textarea::placeholder{color:var(--text-3);opacity:1;}
 }
 </style>
 <!-- Firebase SDK -->
+<script src="./firebase-config.js"></script>
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import{
@@ -4593,26 +4594,23 @@ import{
 }from'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import{getFirestore,collection,doc,setDoc,onSnapshot,serverTimestamp,writeBatch,runTransaction}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-const firebaseConfig={
-  apiKey:"AIzaSyASGEfoKCQuxhACu_9CEQICKEHSKe2N3MA",
-  authDomain:"coursesplan-211e8.firebaseapp.com",
-  projectId:"coursesplan-211e8",
-  storageBucket:"coursesplan-211e8.firebasestorage.app",
-  messagingSenderId:"109854996123",
-  appId:"1:109854996123:web:f6937171fb3109d8e6383e"
-};
+const firebaseConfig=window.__FIREBASE_CONFIG__||{};
 
 let app,auth,db,provider;
-try{
-  app=initializeApp(firebaseConfig);
-  auth=getAuth(app);
-  db=getFirestore(app);
-  provider=new GoogleAuthProvider();
-  provider.setCustomParameters({prompt:'select_account'});
-  console.log('[Firebase] initialized');
-}catch(e){
-  console.error('[Firebase] init failed',e);
-  window._fbInitError=e.message;
+if(firebaseConfig.apiKey&&firebaseConfig.projectId){
+  try{
+    app=initializeApp(firebaseConfig);
+    auth=getAuth(app);
+    db=getFirestore(app);
+    provider=new GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
+    console.log('[Firebase] initialized');
+  }catch(e){
+    console.error('[Firebase] init failed',e);
+    window._fbInitError=e.message;
+  }
+}else{
+  window._fbInitError='Firebase is not configured';
 }
 
 let _unsubscribe=null;
@@ -4668,85 +4666,87 @@ function learningWriteError(error,phase,operationIndex,payload){
   const details={phase,...(operationIndex===undefined?{}:{operationIndex}),...(payload?inspectLearningWrite(payload):null)};
   return Object.assign(new Error('Learning write failed'),{code:error?.code||error?.name,learningWrite:details});
 }
-window._fb={
-  learningInfo:Object.freeze({
-    build:'learning-sync-diagnostics-3',
-    project:firebaseConfig.projectId,
-    database:'(default)',
-    path:learningOperationsPath,
-  }),
-  signIn:smartSignIn,
-  signOut:()=>signOut(auth),
-  saveToCloud:(uid,data)=>setDoc(
-    doc(db,'users',uid,'data','state'),
-    {...data,updatedAt:serverTimestamp()}
-  ).catch(e=>{console.error('[Firebase] saveToCloud error',e);throw e;}),
-  listenCloud:(uid,cb,failed)=>{
-    if(_unsubscribe)_unsubscribe();
-    _unsubscribe=onSnapshot(
+if(auth&&db){
+  window._fb={
+    learningInfo:Object.freeze({
+      build:'learning-sync-diagnostics-3',
+      project:firebaseConfig.projectId,
+      database:'(default)',
+      path:learningOperationsPath,
+    }),
+    signIn:smartSignIn,
+    signOut:()=>signOut(auth),
+    saveToCloud:(uid,data)=>setDoc(
       doc(db,'users',uid,'data','state'),
-      snap=>{
-        if(snap.metadata.hasPendingWrites)return;   // 自己剛寫入的回聲，不需要重繪
-        cb(snap.exists()?snap.data():null);
-      },
-      e=>{console.error('[Firebase] snapshot error',e);failed?.();}
-    );
-  },
-  listenLearning:(uid,receive,failed)=>onSnapshot(learningOperations(uid),
-    {includeMetadataChanges:true},snapshot=>{
-      receive(snapshot.docs.filter(row=>!row.metadata.hasPendingWrites).map(row=>[row.id,decodeLearningRead(row.data())]),!snapshot.metadata.fromCache);
-    },failed),
-  writeLearning:async(uid,ops)=>{
-    const batch=writeBatch(db);
-    for(const [index,[id,op]] of ops.entries()){
-      const payload=encodeLearningWrite(op);
-      try{batch.set(doc(learningOperations(uid),id),payload);}
-      catch(error){throw learningWriteError(error,'batch.set',index,payload);}
-    }
-    try{await batch.commit();}
-    catch(error){throw learningWriteError(error,'batch.commit');}
-  },
-  submitLearningExam:async(uid,id,op)=>{
-    try{
-      return await runTransaction(db,async transaction=>{
-        const ref=doc(learningOperations(uid),id);
-        let recorded;
-        try{recorded=await transaction.get(ref);}
-        catch(error){throw learningWriteError(error,'transaction.get',0);}
-        if(recorded.exists())return decodeLearningRead(recorded.data());
+      {...data,updatedAt:serverTimestamp()}
+    ).catch(e=>{console.error('[Firebase] saveToCloud error',e);throw e;}),
+    listenCloud:(uid,cb,failed)=>{
+      if(_unsubscribe)_unsubscribe();
+      _unsubscribe=onSnapshot(
+        doc(db,'users',uid,'data','state'),
+        snap=>{
+          if(snap.metadata.hasPendingWrites)return;   // 自己剛寫入的回聲，不需要重繪
+          cb(snap.exists()?snap.data():null);
+        },
+        e=>{console.error('[Firebase] snapshot error',e);failed?.();}
+      );
+    },
+    listenLearning:(uid,receive,failed)=>onSnapshot(learningOperations(uid),
+      {includeMetadataChanges:true},snapshot=>{
+        receive(snapshot.docs.filter(row=>!row.metadata.hasPendingWrites).map(row=>[row.id,decodeLearningRead(row.data())]),!snapshot.metadata.fromCache);
+      },failed),
+    writeLearning:async(uid,ops)=>{
+      const batch=writeBatch(db);
+      for(const [index,[id,op]] of ops.entries()){
         const payload=encodeLearningWrite(op);
-        try{transaction.set(ref,payload);}
-        catch(error){throw learningWriteError(error,'transaction.set',0,payload);}
-        return op;
-      });
-    }catch(error){
-      if(error.learningWrite)throw error;
-      throw learningWriteError(error,'transaction.commit');
+        try{batch.set(doc(learningOperations(uid),id),payload);}
+        catch(error){throw learningWriteError(error,'batch.set',index,payload);}
+      }
+      try{await batch.commit();}
+      catch(error){throw learningWriteError(error,'batch.commit');}
+    },
+    submitLearningExam:async(uid,id,op)=>{
+      try{
+        return await runTransaction(db,async transaction=>{
+          const ref=doc(learningOperations(uid),id);
+          let recorded;
+          try{recorded=await transaction.get(ref);}
+          catch(error){throw learningWriteError(error,'transaction.get',0);}
+          if(recorded.exists())return decodeLearningRead(recorded.data());
+          const payload=encodeLearningWrite(op);
+          try{transaction.set(ref,payload);}
+          catch(error){throw learningWriteError(error,'transaction.set',0,payload);}
+          return op;
+        });
+      }catch(error){
+        if(error.learningWrite)throw error;
+        throw learningWriteError(error,'transaction.commit');
+      }
+    },
+    stopListen:()=>{if(_unsubscribe){_unsubscribe();_unsubscribe=null;}},
+  };
+  window._fbReady=true;
+  console.log('[Firebase] _fb exposed to window');
+
+  // 處理 redirect 登入回傳
+  getRedirectResult(auth).then(result=>{
+    if(result?.user)console.log('[Firebase] redirect result user:',result.user.email);
+  }).catch(e=>{
+    if(e.code!=='auth/no-auth-event')console.error('[Firebase] redirect result error',e);
+  });
+
+  onAuthStateChanged(auth,user=>{
+    console.log('[Firebase] auth state:',user?user.email:'null');
+    if(user){
+      window._fbUser=user;
+      window.onFirebaseLogin&&window.onFirebaseLogin(user);
+    }else{
+      window._fbUser=null;
+      window._fb.stopListen();
+      window.onFirebaseLogout&&window.onFirebaseLogout();
     }
-  },
-  stopListen:()=>{if(_unsubscribe){_unsubscribe();_unsubscribe=null;}},
-};
-window._fbReady=true;
-console.log('[Firebase] _fb exposed to window');
-
-// 處理 redirect 登入回傳
-getRedirectResult(auth).then(result=>{
-  if(result?.user)console.log('[Firebase] redirect result user:',result.user.email);
-}).catch(e=>{
-  if(e.code!=='auth/no-auth-event')console.error('[Firebase] redirect result error',e);
-});
-
-onAuthStateChanged(auth,user=>{
-  console.log('[Firebase] auth state:',user?user.email:'null');
-  if(user){
-    window._fbUser=user;
-    window.onFirebaseLogin&&window.onFirebaseLogin(user);
-  }else{
-    window._fbUser=null;
-    window._fb.stopListen();
-    window.onFirebaseLogout&&window.onFirebaseLogout();
-  }
-});
+  });
+}
 </script>
 </head>
 <body data-wide-page="calendar">

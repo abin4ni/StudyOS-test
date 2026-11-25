@@ -48,6 +48,9 @@ self.addEventListener('fetch', event => {
   // 2. 其他網域：不攔截
   if (url.origin !== self.location.origin) return;
 
+  // 2.5 動態環境設定：不快取
+  if (url.pathname.endsWith('/firebase-config.js')) return;
+
   // 3. HTML / 頁面導覽：network-first
   const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/');
   if (isHTML) {
